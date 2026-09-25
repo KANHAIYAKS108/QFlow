@@ -436,6 +436,29 @@ function App() {
     setSelectedTicketId(newTicket.id)
   }
 
+  const autoAssignTicket = () => {
+    const bestMatch = counters.find(
+      (counter) =>
+        counter.location === selectedTicket.location &&
+        counter.supportedServices.includes(selectedTicket.service),
+    ) ?? counters[0]
+
+    const assignedStaff = bestMatch ? bestMatch.assignedStaff : staff[0]?.name
+
+    setTickets((previous) =>
+      previous.map((ticket) =>
+        ticket.id === selectedTicketId
+          ? {
+              ...ticket,
+              assignedCounter: bestMatch ? bestMatch.name : 'Counter 01',
+              assignedStaff,
+              status: ticket.status === 'Waiting' ? 'Notified' : ticket.status,
+            }
+          : ticket,
+      ),
+    )
+  }
+
   const advanceTicketStatus = () => {
     const cycle = queueStatusOptions
     const currentIndex = cycle.indexOf(selectedTicket.status)
@@ -1318,9 +1341,14 @@ function App() {
                     {selectedTicket.status} • Queue position {selectedTicket.queuePosition}
                   </strong>
                 </div>
-                <button type="button" className="primary-btn small-btn" onClick={advanceTicketStatus}>
-                  Advance status
-                </button>
+                <div className="queue-actions">
+                  <button type="button" className="secondary-btn small-btn" onClick={autoAssignTicket}>
+                    Auto assign
+                  </button>
+                  <button type="button" className="primary-btn small-btn" onClick={advanceTicketStatus}>
+                    Advance status
+                  </button>
+                </div>
               </div>
             </div>
           </div>
