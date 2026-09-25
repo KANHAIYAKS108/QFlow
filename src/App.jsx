@@ -1,137 +1,174 @@
 import { useMemo, useState } from 'react'
 import './App.css'
 
-const branchOptions = ['Downtown Branch', 'Business Bay Branch', 'Sharjah Central']
+const branchOptions = ['Noida Sector 18', 'Greater Noida', 'Delhi Central']
+const serviceOptions = [
+  'Account Opening',
+  'KYC',
+  'Loan Consultation',
+  'Cash Deposit',
+  'Card Replacement',
+  'Priority Desk',
+]
 
-const initialServices = [
+const initialStaff = [
   {
     id: 1,
-    name: 'Account Opening',
-    code: 'S001',
-    category: 'Banking',
-    description: 'New customer onboarding and account creation for personal and business clients.',
-    estimatedDuration: 18,
-    bufferTime: 5,
-    priority: 'High',
-    queueEnabled: true,
-    appointmentEnabled: true,
-    remoteJoin: true,
-    maxQueueSize: 30,
-    appointmentDuration: 20,
-    requiredDocuments: 'Passport, Emirates ID, residency proof',
-    status: 'Active',
-    branches: ['Downtown Branch', 'Business Bay Branch'],
+    name: 'Aarav Sharma',
+    email: 'aarav@qflow.group',
+    phone: '+91 98765 43210',
+    employeeId: 'QF-101',
+    role: 'Agent',
+    assignedLocation: 'Noida Sector 18',
+    assignedServices: ['Account Opening', 'KYC'],
+    workingSchedule: 'Mon-Fri 09:00 - 18:00',
+    status: 'Available',
   },
   {
     id: 2,
-    name: 'Cash Deposit',
-    code: 'S002',
-    category: 'Transactions',
-    description: 'Processing large cash deposits and counter transaction support.',
-    estimatedDuration: 12,
-    bufferTime: 3,
-    priority: 'Medium',
-    queueEnabled: true,
-    appointmentEnabled: false,
-    remoteJoin: true,
-    maxQueueSize: 25,
-    appointmentDuration: 10,
-    requiredDocuments: 'Account number or checkbook',
-    status: 'Active',
-    branches: ['Downtown Branch', 'Sharjah Central'],
+    name: 'Priya Nair',
+    email: 'priya@qflow.group',
+    phone: '+91 98123 45678',
+    employeeId: 'QF-204',
+    role: 'Supervisor',
+    assignedLocation: 'Greater Noida',
+    assignedServices: ['Loan Consultation', 'Priority Desk'],
+    workingSchedule: 'Mon-Sat 10:00 - 19:00',
+    status: 'On duty',
   },
   {
     id: 3,
-    name: 'Loan Consultation',
-    code: 'S003',
-    category: 'Finance',
-    description: 'Consultation and eligibility review for personal and SME funding.',
-    estimatedDuration: 25,
-    bufferTime: 7,
-    priority: 'High',
-    queueEnabled: true,
-    appointmentEnabled: true,
-    remoteJoin: true,
-    maxQueueSize: 18,
-    appointmentDuration: 30,
-    requiredDocuments: 'Income proof, ID, application details',
-    status: 'Active',
-    branches: ['Business Bay Branch'],
+    name: 'Rohit Verma',
+    email: 'rohit@qflow.group',
+    phone: '+91 99887 33445',
+    employeeId: 'QF-310',
+    role: 'Manager',
+    assignedLocation: 'Delhi Central',
+    assignedServices: ['Cash Deposit', 'Card Replacement'],
+    workingSchedule: 'Mon-Fri 08:00 - 17:00',
+    status: 'Break',
+  },
+]
+
+const initialCounters = [
+  {
+    id: 1,
+    number: '01',
+    name: 'Counter 01',
+    location: 'Noida Sector 18',
+    supportedServices: ['Account Opening', 'KYC'],
+    assignedStaff: 'Aarav Sharma',
+    status: 'Open',
+  },
+  {
+    id: 2,
+    number: '02',
+    name: 'Counter 02',
+    location: 'Noida Sector 18',
+    supportedServices: ['Loan Consultation', 'Priority Desk'],
+    assignedStaff: 'Priya Nair',
+    status: 'Busy',
+  },
+  {
+    id: 3,
+    number: '03',
+    name: 'Counter 03',
+    location: 'Greater Noida',
+    supportedServices: ['Cash Deposit'],
+    assignedStaff: 'Rohit Verma',
+    status: 'Open',
   },
 ]
 
 const overviewStats = [
-  { label: 'Active services', value: '24', change: '+3 this month', tone: 'blue' },
-  { label: 'Avg handling time', value: '16 min', change: '-2 min better', tone: 'green' },
-  { label: 'Queue-enabled', value: '19', change: '79% coverage', tone: 'amber' },
-  { label: 'Appointments', value: '86%', change: 'Strong adoption', tone: 'purple' },
+  { label: 'On-duty staff', value: '18', change: '+2 this week', tone: 'blue' },
+  { label: 'Active counters', value: '11', change: '4 under watch', tone: 'green' },
+  { label: 'Queue balance', value: '1.2:1', change: 'Stable load', tone: 'amber' },
+  { label: 'Coverage rate', value: '96%', change: 'High routing fit', tone: 'purple' },
 ]
 
 function App() {
-  const [services, setServices] = useState(initialServices)
-  const [selectedServiceId, setSelectedServiceId] = useState(initialServices[0].id)
-  const [serviceFilter, setServiceFilter] = useState('All')
+  const [staff, setStaff] = useState(initialStaff)
+  const [counters, setCounters] = useState(initialCounters)
+  const [selectedStaffId, setSelectedStaffId] = useState(initialStaff[0].id)
+  const [staffFilter, setStaffFilter] = useState('All')
 
-  const filteredServices = useMemo(
+  const filteredStaff = useMemo(
     () =>
-      serviceFilter === 'All'
-        ? services
-        : services.filter((service) => service.category === serviceFilter),
-    [serviceFilter, services],
+      staffFilter === 'All'
+        ? staff
+        : staff.filter((member) => member.role === staffFilter),
+    [staff, staffFilter],
   )
 
-  const selectedService = useMemo(
-    () => services.find((service) => service.id === selectedServiceId) ?? services[0],
-    [services, selectedServiceId],
+  const selectedStaff = useMemo(
+    () => staff.find((member) => member.id === selectedStaffId) ?? staff[0],
+    [selectedStaffId, staff],
   )
 
-  const updateSelectedService = (field, value) => {
-    setServices((previous) =>
-      previous.map((service) =>
-        service.id === selectedServiceId ? { ...service, [field]: value } : service,
+  const updateSelectedStaff = (field, value) => {
+    setStaff((previous) =>
+      previous.map((member) =>
+        member.id === selectedStaffId ? { ...member, [field]: value } : member,
       ),
     )
   }
 
-  const toggleBranch = (branchName) => {
-    setServices((previous) =>
-      previous.map((service) => {
-        if (service.id !== selectedServiceId) return service
+  const toggleAssignedService = (service) => {
+    setStaff((previous) =>
+      previous.map((member) => {
+        if (member.id !== selectedStaffId) return member
 
-        const alreadyAdded = service.branches.includes(branchName)
+        const alreadyAssigned = member.assignedServices.includes(service)
 
         return {
-          ...service,
-          branches: alreadyAdded
-            ? service.branches.filter((branch) => branch !== branchName)
-            : [...service.branches, branchName],
+          ...member,
+          assignedServices: alreadyAssigned
+            ? member.assignedServices.filter((item) => item !== service)
+            : [...member.assignedServices, service],
         }
       }),
     )
   }
 
-  const addService = () => {
-    const newService = {
+  const addStaffMember = () => {
+    const newMember = {
       id: Date.now(),
-      name: 'New Service',
-      code: `S${String(services.length + 100).padStart(3, '0')}`,
-      category: 'General',
-      description: 'Define a new queueable service for branch operations.',
-      estimatedDuration: 15,
-      bufferTime: 4,
-      priority: 'Medium',
-      queueEnabled: true,
-      appointmentEnabled: true,
-      remoteJoin: false,
-      maxQueueSize: 20,
-      appointmentDuration: 15,
-      requiredDocuments: 'Customer ID or relevant document',
-      status: 'Draft',
-      branches: ['Downtown Branch'],
+      name: 'New Staff Member',
+      email: 'new.staff@qflow.group',
+      phone: '+91 90000 00000',
+      employeeId: `QF-${String(staff.length + 100)}`,
+      role: 'Agent',
+      assignedLocation: 'Noida Sector 18',
+      assignedServices: ['Account Opening'],
+      workingSchedule: 'Mon-Fri 09:00 - 17:00',
+      status: 'Available',
     }
 
-    setServices((previous) => [newService, ...previous])
-    setSelectedServiceId(newService.id)
+    setStaff((previous) => [newMember, ...previous])
+    setSelectedStaffId(newMember.id)
+  }
+
+  const updateCounter = (counterId, field, value) => {
+    setCounters((previous) =>
+      previous.map((counter) =>
+        counter.id === counterId ? { ...counter, [field]: value } : counter,
+      ),
+    )
+  }
+
+  const addCounter = () => {
+    const newCounter = {
+      id: Date.now(),
+      number: String(counters.length + 1).padStart(2, '0'),
+      name: `Counter ${String(counters.length + 1).padStart(2, '0')}`,
+      location: 'Noida Sector 18',
+      supportedServices: ['Account Opening'],
+      assignedStaff: 'Aarav Sharma',
+      status: 'Open',
+    }
+
+    setCounters((previous) => [...previous, newCounter])
   }
 
   return (
@@ -153,13 +190,13 @@ function App() {
           <button type="button" className="nav-item">
             Locations
           </button>
-          <button type="button" className="nav-item active">
+          <button type="button" className="nav-item">
             Services
           </button>
           <button type="button" className="nav-item">
             Queues
           </button>
-          <button type="button" className="nav-item">
+          <button type="button" className="nav-item active">
             Staff
           </button>
           <button type="button" className="nav-item">
@@ -171,11 +208,11 @@ function App() {
           <span className="nav-title">System health</span>
           <div className="status-row">
             <span className="dot green" />
-            <span>Queue engine online</span>
+            <span>Routing engine online</span>
           </div>
           <div className="status-row">
             <span className="dot amber" />
-            <span>2 services need review</span>
+            <span>3 counters need coverage</span>
           </div>
         </div>
       </aside>
@@ -183,32 +220,32 @@ function App() {
       <main className="content">
         <header className="top-bar">
           <div>
-            <p className="eyebrow">Master form 2</p>
-            <h1>Service Master</h1>
+            <p className="eyebrow">Master form 3</p>
+            <h1>Staff &amp; Counter Master</h1>
           </div>
           <div className="header-actions">
             <button type="button" className="secondary-btn">
-              Preview service flow
+              Review workload
             </button>
             <button type="button" className="primary-btn">
-              Save service setup
+              Save staffing plan
             </button>
           </div>
         </header>
 
         <section className="hero-banner">
           <div>
-            <p className="eyebrow">Service definition</p>
-            <h2>What the organization actually provides</h2>
+            <p className="eyebrow">Operational staffing</p>
+            <h2>Who can serve whom</h2>
             <p className="hero-copy">
-              This master form defines queue-enabled services, appointment rules, service
-              duration, and branch-level availability across the entire QFlow platform.
+              This master form connects staff capabilities, assigned services, branch coverage,
+              and counter routing so queue distribution remains efficient and controlled.
             </p>
           </div>
           <div className="hero-badges">
-            <span>Queue enabled</span>
-            <span>Appointment ready</span>
-            <span>Remote join</span>
+            <span>Capacity planning</span>
+            <span>Counter routing</span>
+            <span>Live staffing</span>
           </div>
         </section>
 
@@ -222,228 +259,165 @@ function App() {
           ))}
         </section>
 
-        <section className="service-layout">
-          <div className="panel service-panel">
+        <section className="staff-layout">
+          <div className="panel roster-panel">
             <div className="panel-header">
-              <h3>Service catalog</h3>
-              <button type="button" className="mini-btn" onClick={addService}>
-                + Add service
+              <h3>Staff roster</h3>
+              <button type="button" className="mini-btn" onClick={addStaffMember}>
+                + Add staff
               </button>
             </div>
 
             <div className="catalog-actions">
-              <select value={serviceFilter} onChange={(event) => setServiceFilter(event.target.value)}>
-                <option value="All">All categories</option>
-                <option value="Banking">Banking</option>
-                <option value="Finance">Finance</option>
-                <option value="Transactions">Transactions</option>
-                <option value="Support">Support</option>
-                <option value="General">General</option>
+              <select value={staffFilter} onChange={(event) => setStaffFilter(event.target.value)}>
+                <option value="All">All roles</option>
+                <option value="Agent">Agents</option>
+                <option value="Supervisor">Supervisors</option>
+                <option value="Manager">Managers</option>
+                <option value="Admin">Admins</option>
               </select>
-              <span className="catalog-count">{filteredServices.length} services</span>
+              <span className="catalog-count">{filteredStaff.length} employees</span>
             </div>
 
-            <div className="service-list">
-              {filteredServices.map((service) => (
+            <div className="roster-list">
+              {filteredStaff.map((member) => (
                 <button
-                  key={service.id}
+                  key={member.id}
                   type="button"
-                  aria-pressed={service.id === selectedService?.id}
-                  className={`service-card ${service.id === selectedService?.id ? 'selected' : ''}`}
-                  onClick={() => setSelectedServiceId(service.id)}
+                  aria-pressed={member.id === selectedStaff?.id}
+                  className={`staff-card ${member.id === selectedStaff?.id ? 'selected' : ''}`}
+                  onClick={() => setSelectedStaffId(member.id)}
                 >
-                  <div className="service-card-head">
-                    <strong>{service.name}</strong>
-                    <span className={`status-badge ${service.status.toLowerCase()}`}>
-                      {service.status}
+                  <div className="staff-card-head">
+                    <strong>{member.name}</strong>
+                    <span className={`status-badge ${member.status.toLowerCase().replace(/\s+/g, '-')}`}>
+                      {member.status}
                     </span>
                   </div>
                   <small>
-                    {service.code} • {service.category}
+                    {member.role} • {member.employeeId}
                   </small>
-                  <p>{service.branches.join(', ')}</p>
+                  <p>{member.assignedLocation}</p>
                 </button>
               ))}
             </div>
           </div>
 
-          <div className="panel form-panel">
+          <div className="panel details-panel">
             <div className="panel-header">
-              <h3>Service details</h3>
-              <span className="tag success">{selectedService.status}</span>
+              <h3>Staff details</h3>
+              <span className="tag success">{selectedStaff.status}</span>
             </div>
 
-            <div className="service-focus">
+            <div className="staff-focus">
               <div className="focus-pill">
-                <span>Branches</span>
-                <strong>{selectedService.branches.length}</strong>
+                <span>Role</span>
+                <strong>{selectedStaff.role}</strong>
               </div>
               <div className="focus-pill">
-                <span>Duration</span>
-                <strong>{selectedService.estimatedDuration} min</strong>
+                <span>Location</span>
+                <strong>{selectedStaff.assignedLocation}</strong>
               </div>
               <div className="focus-pill">
-                <span>Priority</span>
-                <strong>{selectedService.priority}</strong>
+                <span>Skills</span>
+                <strong>{selectedStaff.assignedServices.length}</strong>
               </div>
             </div>
 
             <div className="field-grid">
               <label>
-                Service Name
+                Name
                 <input
                   type="text"
-                  value={selectedService.name}
-                  onChange={(event) => updateSelectedService('name', event.target.value)}
+                  value={selectedStaff.name}
+                  onChange={(event) => updateSelectedStaff('name', event.target.value)}
                 />
               </label>
               <label>
-                Service Code
+                Email
                 <input
-                  type="text"
-                  value={selectedService.code}
-                  onChange={(event) => updateSelectedService('code', event.target.value)}
+                  type="email"
+                  value={selectedStaff.email}
+                  onChange={(event) => updateSelectedStaff('email', event.target.value)}
                 />
               </label>
               <label>
-                Category
+                Phone
+                <input
+                  type="tel"
+                  value={selectedStaff.phone}
+                  onChange={(event) => updateSelectedStaff('phone', event.target.value)}
+                />
+              </label>
+              <label>
+                Employee ID
+                <input
+                  type="text"
+                  value={selectedStaff.employeeId}
+                  onChange={(event) => updateSelectedStaff('employeeId', event.target.value)}
+                />
+              </label>
+              <label>
+                Role
                 <select
-                  value={selectedService.category}
-                  onChange={(event) => updateSelectedService('category', event.target.value)}
+                  value={selectedStaff.role}
+                  onChange={(event) => updateSelectedStaff('role', event.target.value)}
                 >
-                  <option>Banking</option>
-                  <option>Finance</option>
-                  <option>Transactions</option>
-                  <option>Support</option>
-                  <option>General</option>
+                  <option>Agent</option>
+                  <option>Supervisor</option>
+                  <option>Manager</option>
+                  <option>Admin</option>
                 </select>
+              </label>
+              <label>
+                Assigned Location
+                <select
+                  value={selectedStaff.assignedLocation}
+                  onChange={(event) =>
+                    updateSelectedStaff('assignedLocation', event.target.value)
+                  }
+                >
+                  {branchOptions.map((branch) => (
+                    <option key={branch}>{branch}</option>
+                  ))}
+                </select>
+              </label>
+              <label>
+                Working Schedule
+                <input
+                  type="text"
+                  value={selectedStaff.workingSchedule}
+                  onChange={(event) =>
+                    updateSelectedStaff('workingSchedule', event.target.value)
+                  }
+                />
               </label>
               <label>
                 Status
                 <select
-                  value={selectedService.status}
-                  onChange={(event) => updateSelectedService('status', event.target.value)}
+                  value={selectedStaff.status}
+                  onChange={(event) => updateSelectedStaff('status', event.target.value)}
                 >
-                  <option>Active</option>
-                  <option>Draft</option>
-                  <option>Paused</option>
-                  <option>Archived</option>
+                  <option>Available</option>
+                  <option>On duty</option>
+                  <option>Break</option>
+                  <option>Offline</option>
                 </select>
-              </label>
-              <label className="full-width">
-                Description
-                <textarea
-                  rows="3"
-                  value={selectedService.description}
-                  onChange={(event) => updateSelectedService('description', event.target.value)}
-                />
-              </label>
-              <label>
-                Estimated Service Duration (min)
-                <input
-                  type="number"
-                  value={selectedService.estimatedDuration}
-                  onChange={(event) =>
-                    updateSelectedService('estimatedDuration', Number(event.target.value))
-                  }
-                />
-              </label>
-              <label>
-                Buffer Time (min)
-                <input
-                  type="number"
-                  value={selectedService.bufferTime}
-                  onChange={(event) =>
-                    updateSelectedService('bufferTime', Number(event.target.value))
-                  }
-                />
-              </label>
-              <label>
-                Priority Level
-                <select
-                  value={selectedService.priority}
-                  onChange={(event) => updateSelectedService('priority', event.target.value)}
-                >
-                  <option>High</option>
-                  <option>Medium</option>
-                  <option>Low</option>
-                </select>
-              </label>
-              <label>
-                Maximum Queue Size
-                <input
-                  type="number"
-                  value={selectedService.maxQueueSize}
-                  onChange={(event) =>
-                    updateSelectedService('maxQueueSize', Number(event.target.value))
-                  }
-                />
-              </label>
-              <label>
-                Appointment Duration (min)
-                <input
-                  type="number"
-                  value={selectedService.appointmentDuration}
-                  onChange={(event) =>
-                    updateSelectedService('appointmentDuration', Number(event.target.value))
-                  }
-                />
-              </label>
-              <label className="full-width">
-                Required Documents
-                <input
-                  type="text"
-                  value={selectedService.requiredDocuments}
-                  onChange={(event) =>
-                    updateSelectedService('requiredDocuments', event.target.value)
-                  }
-                />
-              </label>
-            </div>
-
-            <div className="toggle-grid">
-              <label className="toggle-row">
-                <input
-                  type="checkbox"
-                  checked={selectedService.queueEnabled}
-                  onChange={(event) =>
-                    updateSelectedService('queueEnabled', event.target.checked)
-                  }
-                />
-                <span>Queue Enabled</span>
-              </label>
-              <label className="toggle-row">
-                <input
-                  type="checkbox"
-                  checked={selectedService.appointmentEnabled}
-                  onChange={(event) =>
-                    updateSelectedService('appointmentEnabled', event.target.checked)
-                  }
-                />
-                <span>Appointment Enabled</span>
-              </label>
-              <label className="toggle-row">
-                <input
-                  type="checkbox"
-                  checked={selectedService.remoteJoin}
-                  onChange={(event) => updateSelectedService('remoteJoin', event.target.checked)}
-                />
-                <span>Remote Join</span>
               </label>
             </div>
 
             <div className="availability-panel">
-              <h4>Available branches</h4>
+              <h4>Assigned services</h4>
               <div className="branch-chips">
-                {branchOptions.map((branch) => (
+                {serviceOptions.map((service) => (
                   <button
-                    key={branch}
+                    key={service}
                     type="button"
-                    aria-pressed={selectedService.branches.includes(branch)}
-                    className={`chip ${selectedService.branches.includes(branch) ? 'active' : ''}`}
-                    onClick={() => toggleBranch(branch)}
+                    aria-pressed={selectedStaff.assignedServices.includes(service)}
+                    className={`chip ${selectedStaff.assignedServices.includes(service) ? 'active' : ''}`}
+                    onClick={() => toggleAssignedService(service)}
                   >
-                    {branch}
+                    {service}
                   </button>
                 ))}
               </div>
@@ -451,46 +425,100 @@ function App() {
           </div>
         </section>
 
-        <section className="policy-grid">
-          <div className="panel mini-panel">
-            <div className="panel-header">
-              <h3>Queue readiness</h3>
-              <span className="tag success">Operational</span>
-            </div>
-            <div className="readiness-box">
-              <strong>{selectedService.queueEnabled ? 'Ready to queue' : 'Paused for queue'}</strong>
-              <span>{selectedService.maxQueueSize} max customer slots</span>
-            </div>
-            <ul className="policy-list">
-              <li>Average task duration: {selectedService.estimatedDuration} minutes</li>
-              <li>Buffer time: {selectedService.bufferTime} minutes</li>
-              <li>Priority: {selectedService.priority}</li>
-            </ul>
+        <section className="counter-panel panel">
+          <div className="panel-header">
+            <h3>Counter configuration</h3>
+            <button type="button" className="mini-btn" onClick={addCounter}>
+              + Add counter
+            </button>
           </div>
 
-          <div className="panel mini-panel">
-            <div className="panel-header">
-              <h3>Service policies</h3>
-              <span className="tag warning">Business rules</span>
-            </div>
-            <div className="policy-stack">
-              <div className="policy-row">
-                <span>Queue enabled</span>
-                <strong>{selectedService.queueEnabled ? 'On' : 'Off'}</strong>
+          <div className="counter-grid">
+            {counters.map((counter) => (
+              <div key={counter.id} className="counter-card">
+                <div className="counter-head">
+                  <strong>{counter.name}</strong>
+                  <span className={`counter-status ${counter.status.toLowerCase()}`}>
+                    {counter.status}
+                  </span>
+                </div>
+
+                <div className="counter-form">
+                  <label>
+                    Counter Number
+                    <input
+                      type="text"
+                      value={counter.number}
+                      onChange={(event) => updateCounter(counter.id, 'number', event.target.value)}
+                    />
+                  </label>
+                  <label>
+                    Location
+                    <select
+                      value={counter.location}
+                      onChange={(event) => updateCounter(counter.id, 'location', event.target.value)}
+                    >
+                      {branchOptions.map((branch) => (
+                        <option key={branch}>{branch}</option>
+                      ))}
+                    </select>
+                  </label>
+                  <label>
+                    Supported Services
+                    <select
+                      multiple
+                      value={counter.supportedServices}
+                      onChange={(event) =>
+                        updateCounter(
+                          counter.id,
+                          'supportedServices',
+                          Array.from(event.target.selectedOptions, (option) => option.value),
+                        )
+                      }
+                    >
+                      {serviceOptions.map((service) => (
+                        <option key={service} value={service}>
+                          {service}
+                        </option>
+                      ))}
+                    </select>
+                  </label>
+                  <label>
+                    Assigned Staff
+                    <select
+                      value={counter.assignedStaff}
+                      onChange={(event) =>
+                        updateCounter(counter.id, 'assignedStaff', event.target.value)
+                      }
+                    >
+                      {staff.map((member) => (
+                        <option key={member.id}>{member.name}</option>
+                      ))}
+                    </select>
+                  </label>
+                  <label>
+                    Status
+                    <select
+                      value={counter.status}
+                      onChange={(event) => updateCounter(counter.id, 'status', event.target.value)}
+                    >
+                      <option>Open</option>
+                      <option>Busy</option>
+                      <option>Paused</option>
+                      <option>Closed</option>
+                    </select>
+                  </label>
+                </div>
+
+                <div className="service-pills">
+                  {counter.supportedServices.map((service) => (
+                    <span key={service} className="mini-pill">
+                      {service}
+                    </span>
+                  ))}
+                </div>
               </div>
-              <div className="policy-row">
-                <span>Appointment enabled</span>
-                <strong>{selectedService.appointmentEnabled ? 'On' : 'Off'}</strong>
-              </div>
-              <div className="policy-row">
-                <span>Remote join</span>
-                <strong>{selectedService.remoteJoin ? 'Allowed' : 'Not allowed'}</strong>
-              </div>
-              <div className="policy-row">
-                <span>Required docs</span>
-                <strong>{selectedService.requiredDocuments}</strong>
-              </div>
-            </div>
+            ))}
           </div>
         </section>
       </main>
