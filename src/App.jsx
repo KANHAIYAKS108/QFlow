@@ -251,6 +251,19 @@ const liveQueueStats = [
   { label: 'Alerts', value: '3', tone: 'red' },
 ]
 
+const branchLoad = [
+  { location: 'Noida Sector 18', queue: 24, capacity: '82%', pressure: 'Balanced' },
+  { location: 'Greater Noida', queue: 18, capacity: '71%', pressure: 'Stable' },
+  { location: 'Delhi Central', queue: 31, capacity: '93%', pressure: 'Watch' },
+]
+
+const serviceMix = [
+  { name: 'KYC', volume: 34, trend: '+12%' },
+  { name: 'Loan Consultation', volume: 22, trend: '+8%' },
+  { name: 'Account Opening', volume: 19, trend: '+6%' },
+  { name: 'Cash Deposit', volume: 15, trend: '+4%' },
+]
+
 const notificationEvents = [
   'QUEUE_JOINED',
   'POSITION_CHANGED',
@@ -758,6 +771,50 @@ function App() {
               <small>{stat.change}</small>
             </article>
           ))}
+        </section>
+
+        <section className="operations-pulse panel">
+          <div className="panel-header">
+            <div>
+              <p className="eyebrow">Operations pulse</p>
+              <h3>Branch performance</h3>
+            </div>
+            <span className="tag success">Live coverage</span>
+          </div>
+
+          <div className="load-grid">
+            {branchLoad.map((branch) => (
+              <div key={branch.location} className="load-card">
+                <div className="load-head">
+                  <strong>{branch.location}</strong>
+                  <span className={`pressure-tag ${branch.pressure.toLowerCase()}`}>{branch.pressure}</span>
+                </div>
+                <div className="load-metrics">
+                  <div>
+                    <span>Queue</span>
+                    <strong>{branch.queue}</strong>
+                  </div>
+                  <div>
+                    <span>Capacity</span>
+                    <strong>{branch.capacity}</strong>
+                  </div>
+                </div>
+                <div className="load-bar">
+                  <span style={{ width: branch.capacity }} />
+                </div>
+              </div>
+            ))}
+          </div>
+
+          <div className="mix-grid">
+            {serviceMix.map((service) => (
+              <div key={service.name} className="mix-card">
+                <span>{service.name}</span>
+                <strong>{service.volume}</strong>
+                <small>{service.trend}</small>
+              </div>
+            ))}
+          </div>
         </section>
 
         <section className="staff-layout">

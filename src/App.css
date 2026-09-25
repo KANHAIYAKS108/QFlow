@@ -240,6 +240,137 @@
   margin-bottom: 24px;
 }
 
+.operations-pulse {
+  margin-bottom: 20px;
+}
+
+.load-grid {
+  display: grid;
+  grid-template-columns: repeat(3, minmax(0, 1fr));
+  gap: 16px;
+  margin-top: 8px;
+}
+
+.load-card {
+  background: linear-gradient(180deg, #f8fafc 0%, #f4f8ff 100%);
+  border: 1px solid #e2e8f0;
+  border-radius: 18px;
+  padding: 16px;
+}
+
+.load-head {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  gap: 10px;
+  margin-bottom: 12px;
+}
+
+.load-head strong {
+  color: #0f172a;
+}
+
+.pressure-tag {
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+  border-radius: 999px;
+  padding: 5px 8px;
+  font-size: 0.64rem;
+  font-weight: 700;
+  letter-spacing: 0.05em;
+  text-transform: uppercase;
+}
+
+.pressure-tag.balanced {
+  background: rgba(16, 185, 129, 0.12);
+  color: #166534;
+}
+
+.pressure-tag.stable {
+  background: rgba(59, 130, 246, 0.12);
+  color: #1d4ed8;
+}
+
+.pressure-tag.watch {
+  background: rgba(245, 158, 11, 0.12);
+  color: #92400e;
+}
+
+.load-metrics {
+  display: grid;
+  grid-template-columns: repeat(2, minmax(0, 1fr));
+  gap: 12px;
+  margin-bottom: 14px;
+}
+
+.load-metrics div {
+  display: flex;
+  flex-direction: column;
+  gap: 6px;
+}
+
+.load-metrics span {
+  color: #475569;
+  font-size: 0.7rem;
+  text-transform: uppercase;
+  letter-spacing: 0.06em;
+}
+
+.load-metrics strong {
+  color: #0f172a;
+  font-size: 1.1rem;
+}
+
+.load-bar {
+  height: 12px;
+  width: 100%;
+  background: #dbeafe;
+  border-radius: 999px;
+  overflow: hidden;
+}
+
+.load-bar span {
+  display: block;
+  height: 100%;
+  border-radius: inherit;
+  background: linear-gradient(90deg, #38bdf8, #2563eb);
+}
+
+.mix-grid {
+  display: grid;
+  grid-template-columns: repeat(4, minmax(0, 1fr));
+  gap: 12px;
+  margin-top: 18px;
+}
+
+.mix-card {
+  background: #f8fafc;
+  border: 1px solid #e2e8f0;
+  border-radius: 14px;
+  padding: 12px 14px;
+  display: flex;
+  flex-direction: column;
+  gap: 6px;
+}
+
+.mix-card span {
+  color: #475569;
+  font-size: 0.7rem;
+  text-transform: uppercase;
+  letter-spacing: 0.06em;
+}
+
+.mix-card strong {
+  color: #0f172a;
+  font-size: 1.3rem;
+}
+
+.mix-card small {
+  color: #2563eb;
+  font-weight: 700;
+}
+
 .stat-card {
   background: white;
   border: 1px solid #e2e8f0;
