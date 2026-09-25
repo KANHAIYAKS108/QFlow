@@ -805,6 +805,35 @@ textarea:focus {
   gap: 8px;
 }
 
+.readiness-grid {
+  display: grid;
+  grid-template-columns: repeat(4, minmax(0, 1fr));
+  gap: 12px;
+  margin: 0 0 18px;
+}
+
+.readiness-card {
+  background: white;
+  border: 1px solid #e2e8f0;
+  border-radius: 14px;
+  padding: 12px 14px;
+  display: flex;
+  flex-direction: column;
+  gap: 6px;
+}
+
+.readiness-card span {
+  color: #475569;
+  font-size: 0.7rem;
+  text-transform: uppercase;
+  letter-spacing: 0.06em;
+}
+
+.readiness-card strong {
+  color: #0f172a;
+  font-size: 1.05rem;
+}
+
 .queue-actions {
   display: flex;
   flex-wrap: wrap;

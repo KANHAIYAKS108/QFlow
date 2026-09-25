@@ -444,6 +444,13 @@ function App() {
     { label: 'Completed', value: selectedTicket.serviceCompletedAt },
   ].filter((step) => step.value)
 
+  const queueReadiness = [
+    { label: 'Priority', value: selectedTicket.priority },
+    { label: 'Service match', value: selectedTicket.service ? 'Ready' : 'Pending' },
+    { label: 'Assigned counter', value: selectedTicket.assignedCounter || 'Unassigned' },
+    { label: 'Wait estimate', value: selectedTicket.estimatedWait || 'Pending' },
+  ]
+
   const autoAssignTicket = () => {
     const bestMatch = counters.find(
       (counter) =>
@@ -1204,6 +1211,15 @@ function App() {
                     <p className="empty-copy">No activity recorded yet.</p>
                   )}
                 </div>
+              </div>
+
+              <div className="readiness-grid">
+                {queueReadiness.map((item) => (
+                  <div key={item.label} className="readiness-card">
+                    <span>{item.label}</span>
+                    <strong>{item.value}</strong>
+                  </div>
+                ))}
               </div>
 
               <div className="field-grid">
