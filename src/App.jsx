@@ -364,6 +364,12 @@ const reportMetrics = [
   { label: 'Export readiness', value: 'Ready', tone: 'purple' },
 ]
 
+const reportHighlights = [
+  { label: 'Best branch', value: 'Greater Noida', tone: 'green' },
+  { label: 'Watch list', value: 'Delhi Central', tone: 'amber' },
+  { label: 'Audit status', value: 'Clean', tone: 'blue' },
+]
+
 function App() {
   const [staff, setStaff] = useState(initialStaff)
   const [counters, setCounters] = useState(initialCounters)
@@ -2062,6 +2068,15 @@ function App() {
                     <option>Finance</option>
                   </select>
                 </label>
+              </div>
+
+              <div className="report-highlights">
+                {reportHighlights.map((item) => (
+                  <div key={item.label} className={`highlight-pill ${item.tone}`}>
+                    <span>{item.label}</span>
+                    <strong>{item.value}</strong>
+                  </div>
+                ))}
               </div>
             </div>
           </div>
