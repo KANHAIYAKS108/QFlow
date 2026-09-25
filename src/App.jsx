@@ -1,128 +1,128 @@
 import { useMemo, useState } from 'react'
 import './App.css'
 
-const initialOrganization = {
-  organizationName: 'QFlow Group',
-  businessType: 'Financial Services',
-  phone: '+971 4 555 2080',
-  email: 'support@qflow.group',
-  website: 'www.qflow.group',
-  timezone: 'Asia/Dubai',
-  currency: 'AED',
-}
+const branchOptions = ['Downtown Branch', 'Business Bay Branch', 'Sharjah Central']
 
-const initialBranches = [
+const initialServices = [
   {
     id: 1,
-    name: 'Downtown Branch',
-    code: 'DXB-01',
-    city: 'Dubai',
-    country: 'UAE',
-    status: 'Open',
-    counters: 5,
-    queueHealth: 'Stable',
-    address: 'Al Wasl Road, Dubai International Financial Centre',
-    coordinates: '25.1972, 55.2744',
+    name: 'Account Opening',
+    code: 'S001',
+    category: 'Banking',
+    description: 'New customer onboarding and account creation for personal and business clients.',
+    estimatedDuration: 18,
+    bufferTime: 5,
+    priority: 'High',
+    queueEnabled: true,
+    appointmentEnabled: true,
+    remoteJoin: true,
+    maxQueueSize: 30,
+    appointmentDuration: 20,
+    requiredDocuments: 'Passport, Emirates ID, residency proof',
+    status: 'Active',
+    branches: ['Downtown Branch', 'Business Bay Branch'],
   },
   {
     id: 2,
-    name: 'Business Bay Branch',
-    code: 'DXB-02',
-    city: 'Dubai',
-    country: 'UAE',
-    status: 'Busy',
-    counters: 6,
-    queueHealth: 'Watch',
-    address: 'Marina Walk, Business Bay',
-    coordinates: '25.1850, 55.2747',
+    name: 'Cash Deposit',
+    code: 'S002',
+    category: 'Transactions',
+    description: 'Processing large cash deposits and counter transaction support.',
+    estimatedDuration: 12,
+    bufferTime: 3,
+    priority: 'Medium',
+    queueEnabled: true,
+    appointmentEnabled: false,
+    remoteJoin: true,
+    maxQueueSize: 25,
+    appointmentDuration: 10,
+    requiredDocuments: 'Account number or checkbook',
+    status: 'Active',
+    branches: ['Downtown Branch', 'Sharjah Central'],
   },
   {
     id: 3,
-    name: 'Sharjah Central',
-    code: 'SHJ-03',
-    city: 'Sharjah',
-    country: 'UAE',
-    status: 'Open',
-    counters: 4,
-    queueHealth: 'Stable',
-    address: 'Al Majaz Square, Sharjah',
-    coordinates: '25.3180, 55.3977',
+    name: 'Loan Consultation',
+    code: 'S003',
+    category: 'Finance',
+    description: 'Consultation and eligibility review for personal and SME funding.',
+    estimatedDuration: 25,
+    bufferTime: 7,
+    priority: 'High',
+    queueEnabled: true,
+    appointmentEnabled: true,
+    remoteJoin: true,
+    maxQueueSize: 18,
+    appointmentDuration: 30,
+    requiredDocuments: 'Income proof, ID, application details',
+    status: 'Active',
+    branches: ['Business Bay Branch'],
   },
 ]
 
-const initialOperatingHours = [
-  { day: 'Monday', hours: '09:00 → 18:00' },
-  { day: 'Tuesday', hours: '09:00 → 18:00' },
-  { day: 'Wednesday', hours: '09:00 → 18:00' },
-  { day: 'Thursday', hours: '09:00 → 18:00' },
-  { day: 'Friday', hours: '09:00 → 18:00' },
-  { day: 'Saturday', hours: '09:00 → 14:00' },
-  { day: 'Sunday', hours: 'Closed' },
-]
-
 const overviewStats = [
-  { label: 'Active branches', value: '14', change: '+2 this week', tone: 'blue' },
-  { label: 'Average wait', value: '11–16 min', change: 'Down 4 mins', tone: 'green' },
-  { label: 'Queue load', value: '76%', change: 'Peak 12:30 PM', tone: 'amber' },
-  { label: 'Satisfaction', value: '94.6%', change: '+1.8% this month', tone: 'purple' },
-]
-
-const liveQueue = [
-  { token: 'A-214', service: 'Account opening', status: 'In service', eta: '03 min' },
-  { token: 'W-117', service: 'Card replacement', status: 'Waiting', eta: '18 min' },
-  { token: 'A-208', service: 'Loan review', status: 'Ready', eta: '01 min' },
-  { token: 'W-119', service: 'KYC verification', status: 'Waiting', eta: '09 min' },
-  { token: 'A-199', service: 'Priority desk', status: 'Skipped', eta: 'N/A' },
+  { label: 'Active services', value: '24', change: '+3 this month', tone: 'blue' },
+  { label: 'Avg handling time', value: '16 min', change: '-2 min better', tone: 'green' },
+  { label: 'Queue-enabled', value: '19', change: '79% coverage', tone: 'amber' },
+  { label: 'Appointments', value: '86%', change: 'Strong adoption', tone: 'purple' },
 ]
 
 function App() {
-  const [organization, setOrganization] = useState(initialOrganization)
-  const [branches, setBranches] = useState(initialBranches)
-  const [selectedBranchId, setSelectedBranchId] = useState(initialBranches[0].id)
-  const [operatingHours, setOperatingHours] = useState(initialOperatingHours)
+  const [services, setServices] = useState(initialServices)
+  const [selectedServiceId, setSelectedServiceId] = useState(initialServices[0].id)
 
-  const selectedBranch = useMemo(
-    () => branches.find((branch) => branch.id === selectedBranchId) ?? branches[0],
-    [branches, selectedBranchId],
+  const selectedService = useMemo(
+    () => services.find((service) => service.id === selectedServiceId) ?? services[0],
+    [services, selectedServiceId],
   )
 
-  const handleOrganizationChange = (event) => {
-    const { name, value } = event.target
-    setOrganization((previous) => ({ ...previous, [name]: value }))
-  }
-
-  const handleBranchChange = (field, value) => {
-    setBranches((previous) =>
-      previous.map((branch) =>
-        branch.id === selectedBranchId ? { ...branch, [field]: value } : branch,
+  const updateSelectedService = (field, value) => {
+    setServices((previous) =>
+      previous.map((service) =>
+        service.id === selectedServiceId ? { ...service, [field]: value } : service,
       ),
     )
   }
 
-  const addBranch = () => {
-    const newBranch = {
+  const toggleBranch = (branchName) => {
+    setServices((previous) =>
+      previous.map((service) => {
+        if (service.id !== selectedServiceId) return service
+
+        const alreadyAdded = service.branches.includes(branchName)
+
+        return {
+          ...service,
+          branches: alreadyAdded
+            ? service.branches.filter((branch) => branch !== branchName)
+            : [...service.branches, branchName],
+        }
+      }),
+    )
+  }
+
+  const addService = () => {
+    const newService = {
       id: Date.now(),
-      name: 'New Branch',
-      code: `BR-${branches.length + 1}`,
-      city: 'New City',
-      country: 'UAE',
-      status: 'Open',
-      counters: 4,
-      queueHealth: 'Stable',
-      address: 'New branch address',
-      coordinates: '24.4539, 54.3773',
+      name: 'New Service',
+      code: `S${String(services.length + 100).padStart(3, '0')}`,
+      category: 'General',
+      description: 'Define a new queueable service for branch operations.',
+      estimatedDuration: 15,
+      bufferTime: 4,
+      priority: 'Medium',
+      queueEnabled: true,
+      appointmentEnabled: true,
+      remoteJoin: false,
+      maxQueueSize: 20,
+      appointmentDuration: 15,
+      requiredDocuments: 'Customer ID or relevant document',
+      status: 'Draft',
+      branches: ['Downtown Branch'],
     }
 
-    setBranches((previous) => [...previous, newBranch])
-    setSelectedBranchId(newBranch.id)
-  }
-
-  const handleOperatingHoursChange = (index, value) => {
-    setOperatingHours((previous) =>
-      previous.map((day, dayIndex) =>
-        dayIndex === index ? { ...day, hours: value } : day,
-      ),
-    )
+    setServices((previous) => [newService, ...previous])
+    setSelectedServiceId(newService.id)
   }
 
   return (
@@ -138,13 +138,13 @@ function App() {
 
         <nav className="nav-panel">
           <span className="nav-title">Workspace</span>
-          <button type="button" className="nav-item active">
+          <button type="button" className="nav-item">
             Organization
           </button>
           <button type="button" className="nav-item">
             Locations
           </button>
-          <button type="button" className="nav-item">
+          <button type="button" className="nav-item active">
             Services
           </button>
           <button type="button" className="nav-item">
@@ -166,7 +166,7 @@ function App() {
           </div>
           <div className="status-row">
             <span className="dot amber" />
-            <span>2 branches under watch</span>
+            <span>2 services need review</span>
           </div>
         </div>
       </aside>
@@ -174,32 +174,32 @@ function App() {
       <main className="content">
         <header className="top-bar">
           <div>
-            <p className="eyebrow">Operations control</p>
-            <h1>QFlow command center</h1>
+            <p className="eyebrow">Master form 2</p>
+            <h1>Service Master</h1>
           </div>
           <div className="header-actions">
             <button type="button" className="secondary-btn">
-              Preview flow
+              Preview service flow
             </button>
             <button type="button" className="primary-btn">
-              Publish changes
+              Save service setup
             </button>
           </div>
         </header>
 
         <section className="hero-banner">
           <div>
-            <p className="eyebrow">Master form 1</p>
-            <h2>Organization &amp; Location Master</h2>
+            <p className="eyebrow">Service definition</p>
+            <h2>What the organization actually provides</h2>
             <p className="hero-copy">
-              This foundation defines the organization, every branch, and the operating
-              schedule behind the customer-flow engine.
+              This master form defines queue-enabled services, appointment rules, service
+              duration, and branch-level availability across the entire QFlow platform.
             </p>
           </div>
           <div className="hero-badges">
-            <span>Real-time queue tracking</span>
-            <span>Appointment + walk-in unified</span>
-            <span>Branch analytics</span>
+            <span>Queue enabled</span>
+            <span>Appointment ready</span>
+            <span>Remote join</span>
           </div>
         </section>
 
@@ -213,235 +213,202 @@ function App() {
           ))}
         </section>
 
-        <section className="form-grid">
-          <div className="panel">
+        <section className="service-layout">
+          <div className="panel service-panel">
             <div className="panel-header">
-              <h3>Organization profile</h3>
-              <span className="tag neutral">Core setup</span>
+              <h3>Service catalog</h3>
+              <button type="button" className="mini-btn" onClick={addService}>
+                + Add service
+              </button>
+            </div>
+
+            <div className="service-list">
+              {services.map((service) => (
+                <button
+                  key={service.id}
+                  type="button"
+                  className={`service-card ${service.id === selectedService?.id ? 'selected' : ''}`}
+                  onClick={() => setSelectedServiceId(service.id)}
+                >
+                  <div className="service-card-head">
+                    <strong>{service.name}</strong>
+                    <span className={`status-badge ${service.status.toLowerCase()}`}>
+                      {service.status}
+                    </span>
+                  </div>
+                  <small>
+                    {service.code} • {service.category}
+                  </small>
+                  <p>{service.branches.join(', ')}</p>
+                </button>
+              ))}
+            </div>
+          </div>
+
+          <div className="panel form-panel">
+            <div className="panel-header">
+              <h3>Service details</h3>
+              <span className="tag success">{selectedService.status}</span>
             </div>
 
             <div className="field-grid">
               <label>
-                Organization Name
+                Service Name
                 <input
                   type="text"
-                  name="organizationName"
-                  value={organization.organizationName}
-                  onChange={handleOrganizationChange}
+                  value={selectedService.name}
+                  onChange={(event) => updateSelectedService('name', event.target.value)}
                 />
               </label>
               <label>
-                Business Type
+                Service Code
                 <input
                   type="text"
-                  name="businessType"
-                  value={organization.businessType}
-                  onChange={handleOrganizationChange}
+                  value={selectedService.code}
+                  onChange={(event) => updateSelectedService('code', event.target.value)}
                 />
               </label>
               <label>
-                Phone
-                <input
-                  type="text"
-                  name="phone"
-                  value={organization.phone}
-                  onChange={handleOrganizationChange}
-                />
-              </label>
-              <label>
-                Email
-                <input
-                  type="email"
-                  name="email"
-                  value={organization.email}
-                  onChange={handleOrganizationChange}
-                />
-              </label>
-              <label>
-                Website
-                <input
-                  type="text"
-                  name="website"
-                  value={organization.website}
-                  onChange={handleOrganizationChange}
-                />
-              </label>
-              <label>
-                Timezone
-                <input
-                  type="text"
-                  name="timezone"
-                  value={organization.timezone}
-                  onChange={handleOrganizationChange}
-                />
-              </label>
-              <label>
-                Currency
-                <input
-                  type="text"
-                  name="currency"
-                  value={organization.currency}
-                  onChange={handleOrganizationChange}
-                />
-              </label>
-              <label>
-                Logo URL
-                <input type="text" value="qflow.group/logo.png" readOnly />
-              </label>
-            </div>
-          </div>
-
-          <div className="panel">
-            <div className="panel-header">
-              <h3>Branch configuration</h3>
-              <button type="button" className="mini-btn" onClick={addBranch}>
-                + Add branch
-              </button>
-            </div>
-
-            <div className="branch-cards">
-              {branches.map((branch) => (
-                <button
-                  key={branch.id}
-                  type="button"
-                  className={`branch-select ${branch.id === selectedBranch?.id ? 'selected' : ''}`}
-                  onClick={() => setSelectedBranchId(branch.id)}
-                >
-                  <span>{branch.name}</span>
-                  <small>
-                    {branch.code} • {branch.status}
-                  </small>
-                </button>
-              ))}
-            </div>
-
-            <div className="field-grid compact-grid">
-              <label>
-                Branch Name
-                <input
-                  type="text"
-                  value={selectedBranch.name}
-                  onChange={(event) => handleBranchChange('name', event.target.value)}
-                />
-              </label>
-              <label>
-                Branch Code
-                <input
-                  type="text"
-                  value={selectedBranch.code}
-                  onChange={(event) => handleBranchChange('code', event.target.value)}
-                />
-              </label>
-              <label>
-                Address
-                <input
-                  type="text"
-                  value={selectedBranch.address}
-                  onChange={(event) => handleBranchChange('address', event.target.value)}
-                />
-              </label>
-              <label>
-                City
-                <input
-                  type="text"
-                  value={selectedBranch.city}
-                  onChange={(event) => handleBranchChange('city', event.target.value)}
-                />
-              </label>
-              <label>
-                Country
-                <input
-                  type="text"
-                  value={selectedBranch.country}
-                  onChange={(event) => handleBranchChange('country', event.target.value)}
-                />
-              </label>
-              <label>
-                Coordinates
-                <input
-                  type="text"
-                  value={selectedBranch.coordinates}
-                  onChange={(event) => handleBranchChange('coordinates', event.target.value)}
-                />
-              </label>
-              <label>
-                Queue Health
+                Category
                 <select
-                  value={selectedBranch.queueHealth}
-                  onChange={(event) => handleBranchChange('queueHealth', event.target.value)}
+                  value={selectedService.category}
+                  onChange={(event) => updateSelectedService('category', event.target.value)}
                 >
-                  <option>Stable</option>
-                  <option>Watch</option>
-                  <option>Busy</option>
+                  <option>Banking</option>
+                  <option>Finance</option>
+                  <option>Transactions</option>
+                  <option>Support</option>
+                  <option>General</option>
                 </select>
               </label>
               <label>
                 Status
                 <select
-                  value={selectedBranch.status}
-                  onChange={(event) => handleBranchChange('status', event.target.value)}
+                  value={selectedService.status}
+                  onChange={(event) => updateSelectedService('status', event.target.value)}
                 >
-                  <option>Open</option>
-                  <option>Busy</option>
-                  <option>Closed</option>
+                  <option>Active</option>
+                  <option>Draft</option>
+                  <option>Paused</option>
+                  <option>Archived</option>
                 </select>
               </label>
+              <label className="full-width">
+                Description
+                <textarea
+                  rows="3"
+                  value={selectedService.description}
+                  onChange={(event) => updateSelectedService('description', event.target.value)}
+                />
+              </label>
+              <label>
+                Estimated Service Duration (min)
+                <input
+                  type="number"
+                  value={selectedService.estimatedDuration}
+                  onChange={(event) =>
+                    updateSelectedService('estimatedDuration', Number(event.target.value))
+                  }
+                />
+              </label>
+              <label>
+                Buffer Time (min)
+                <input
+                  type="number"
+                  value={selectedService.bufferTime}
+                  onChange={(event) =>
+                    updateSelectedService('bufferTime', Number(event.target.value))
+                  }
+                />
+              </label>
+              <label>
+                Priority Level
+                <select
+                  value={selectedService.priority}
+                  onChange={(event) => updateSelectedService('priority', event.target.value)}
+                >
+                  <option>High</option>
+                  <option>Medium</option>
+                  <option>Low</option>
+                </select>
+              </label>
+              <label>
+                Maximum Queue Size
+                <input
+                  type="number"
+                  value={selectedService.maxQueueSize}
+                  onChange={(event) =>
+                    updateSelectedService('maxQueueSize', Number(event.target.value))
+                  }
+                />
+              </label>
+              <label>
+                Appointment Duration (min)
+                <input
+                  type="number"
+                  value={selectedService.appointmentDuration}
+                  onChange={(event) =>
+                    updateSelectedService('appointmentDuration', Number(event.target.value))
+                  }
+                />
+              </label>
+              <label className="full-width">
+                Required Documents
+                <input
+                  type="text"
+                  value={selectedService.requiredDocuments}
+                  onChange={(event) =>
+                    updateSelectedService('requiredDocuments', event.target.value)
+                  }
+                />
+              </label>
             </div>
-          </div>
-        </section>
 
-        <section className="bottom-grid">
-          <div className="panel">
-            <div className="panel-header">
-              <h3>Operating hours</h3>
-              <span className="tag success">Daily schedule</span>
+            <div className="toggle-grid">
+              <label className="toggle-row">
+                <input
+                  type="checkbox"
+                  checked={selectedService.queueEnabled}
+                  onChange={(event) =>
+                    updateSelectedService('queueEnabled', event.target.checked)
+                  }
+                />
+                <span>Queue Enabled</span>
+              </label>
+              <label className="toggle-row">
+                <input
+                  type="checkbox"
+                  checked={selectedService.appointmentEnabled}
+                  onChange={(event) =>
+                    updateSelectedService('appointmentEnabled', event.target.checked)
+                  }
+                />
+                <span>Appointment Enabled</span>
+              </label>
+              <label className="toggle-row">
+                <input
+                  type="checkbox"
+                  checked={selectedService.remoteJoin}
+                  onChange={(event) => updateSelectedService('remoteJoin', event.target.checked)}
+                />
+                <span>Remote Join</span>
+              </label>
             </div>
 
-            <table className="hours-table">
-              <thead>
-                <tr>
-                  <th>Day</th>
-                  <th>Hours</th>
-                </tr>
-              </thead>
-              <tbody>
-                {operatingHours.map((slot, index) => (
-                  <tr key={slot.day}>
-                    <td>{slot.day}</td>
-                    <td>
-                      <input
-                        type="text"
-                        value={slot.hours}
-                        onChange={(event) => handleOperatingHoursChange(index, event.target.value)}
-                      />
-                    </td>
-                  </tr>
+            <div className="availability-panel">
+              <h4>Available branches</h4>
+              <div className="branch-chips">
+                {branchOptions.map((branch) => (
+                  <button
+                    key={branch}
+                    type="button"
+                    className={`chip ${selectedService.branches.includes(branch) ? 'active' : ''}`}
+                    onClick={() => toggleBranch(branch)}
+                  >
+                    {branch}
+                  </button>
                 ))}
-              </tbody>
-            </table>
-          </div>
-
-          <div className="panel">
-            <div className="panel-header">
-              <h3>Live queue snapshot</h3>
-              <span className="tag warning">Updated 4m ago</span>
-            </div>
-
-            <div className="queue-list">
-              {liveQueue.map((entry) => (
-                <div key={entry.token} className="queue-row">
-                  <div>
-                    <strong>{entry.token}</strong>
-                    <span>{entry.service}</span>
-                  </div>
-                  <div className="queue-meta">
-                    <span className={`batch ${entry.status.toLowerCase().replace(/\s+/g, '-')}`}>
-                      {entry.status}
-                    </span>
-                    <small>{entry.eta}</small>
-                  </div>
-                </div>
-              ))}
+              </div>
             </div>
           </div>
         </section>
