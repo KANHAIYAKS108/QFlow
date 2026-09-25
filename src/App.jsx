@@ -344,6 +344,12 @@ const analyticsCharts = [
   },
 ]
 
+const intelligenceInsights = [
+  { label: 'Best performing branch', value: 'Greater Noida', tone: 'green' },
+  { label: 'Peak window', value: '12:00 – 14:00', tone: 'blue' },
+  { label: 'Recommended action', value: 'Shift 2 agents to KYC', tone: 'amber' },
+]
+
 function App() {
   const [staff, setStaff] = useState(initialStaff)
   const [counters, setCounters] = useState(initialCounters)
@@ -1942,6 +1948,15 @@ function App() {
                     </div>
                   ))}
                 </div>
+              </div>
+            ))}
+          </div>
+
+          <div className="insight-grid">
+            {intelligenceInsights.map((item) => (
+              <div key={item.label} className={`insight-card ${item.tone}`}>
+                <span>{item.label}</span>
+                <strong>{item.value}</strong>
               </div>
             ))}
           </div>
