@@ -297,6 +297,14 @@ function App() {
     [selectedStaffId, staff],
   )
 
+  const toggleNotificationChannel = (channel) => {
+    setSelectedChannels((previous) =>
+      previous.includes(channel)
+        ? previous.filter((item) => item !== channel)
+        : [...previous, channel],
+    )
+  }
+
   const updateSelectedStaff = (field, value) => {
     setStaff((previous) =>
       previous.map((member) =>
@@ -1797,7 +1805,11 @@ function App() {
               <div className="channel-list">
                 {notificationChannels.map((channel) => (
                   <label key={channel} className="channel-item">
-                    <input type="checkbox" checked={selectedChannels.includes(channel)} readOnly />
+                    <input
+                      type="checkbox"
+                      checked={selectedChannels.includes(channel)}
+                      onChange={() => toggleNotificationChannel(channel)}
+                    />
                     <span>{channel}</span>
                   </label>
                 ))}
