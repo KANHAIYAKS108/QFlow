@@ -1,5 +1,6 @@
 import { useEffect, useMemo, useState } from 'react'
 import { buildRoutingGuidance } from './queueRouting.js'
+import { fetchDashboardData } from './services/qflowApi.js'
 import './App.css'
 
 const branchOptions = ['Noida Sector 18', 'Greater Noida', 'Delhi Central']
@@ -429,6 +430,28 @@ function App() {
   const [queueEvents, setQueueEvents] = useState([
     { id: 1, action: 'System', detail: 'Control room initialized', time: '09:45 AM' },
   ])
+
+  useEffect(() => {
+    let isMounted = true
+
+    const loadDashboard = async () => {
+      const payload = await fetchDashboardData()
+      if (!payload || !isMounted) return
+
+      setStaff(payload.staff ?? initialStaff)
+      setCounters(payload.counters ?? initialCounters)
+      setAppointments(payload.appointments ?? initialAppointments)
+      setTickets(payload.tickets ?? initialTickets)
+      setSelectedStaffId((payload.staff?.[0]?.id ?? initialStaff[0].id))
+      setSelectedAppointmentId((payload.appointments?.[0]?.id ?? initialAppointments[0].id))
+      setSelectedTicketId((payload.tickets?.[0]?.id ?? initialTickets[0].id))
+    }
+
+    loadDashboard()
+    return () => {
+      isMounted = false
+    }
+  }, [])
 
   const filteredStaff = useMemo(
     () =>
