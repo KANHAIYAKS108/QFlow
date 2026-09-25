@@ -451,6 +451,29 @@ function App() {
     { label: 'Wait estimate', value: selectedTicket.estimatedWait || 'Pending' },
   ]
 
+  const queueAlerts = [
+    {
+      label: 'Escalations',
+      value: selectedTicket.priority === 'VIP' ? '1 Critical' : '0 Active',
+      tone: 'amber',
+    },
+    {
+      label: 'Missed SLA',
+      value: selectedTicket.status === 'Waiting' ? '12 min' : 'On target',
+      tone: 'purple',
+    },
+    {
+      label: 'Transfer risk',
+      value: selectedTicket.assignedCounter ? 'Low' : 'High',
+      tone: 'blue',
+    },
+    {
+      label: 'Service health',
+      value: selectedTicket.status === 'Serving' ? 'Stable' : 'Watch',
+      tone: 'red',
+    },
+  ]
+
   const autoAssignTicket = () => {
     const bestMatch = counters.find(
       (counter) =>
@@ -1216,6 +1239,15 @@ function App() {
               <div className="readiness-grid">
                 {queueReadiness.map((item) => (
                   <div key={item.label} className="readiness-card">
+                    <span>{item.label}</span>
+                    <strong>{item.value}</strong>
+                  </div>
+                ))}
+              </div>
+
+              <div className="alert-grid">
+                {queueAlerts.map((item) => (
+                  <div key={item.label} className={`alert-card ${item.tone}`}>
                     <span>{item.label}</span>
                     <strong>{item.value}</strong>
                   </div>
