@@ -384,6 +384,12 @@ const auditEvents = [
   { title: 'No-show exception', detail: 'Rahul Mehta • digital follow-up scheduled', time: '12:05 PM', level: 'Review' },
 ]
 
+const complianceRecommendations = [
+  { label: 'Risk review', value: 'Low', tone: 'green' },
+  { label: 'Supervisor action', value: '2 pending', tone: 'amber' },
+  { label: 'Policy drift', value: '0.4%', tone: 'blue' },
+]
+
 function App() {
   const [staff, setStaff] = useState(initialStaff)
   const [counters, setCounters] = useState(initialCounters)
@@ -2149,6 +2155,15 @@ function App() {
               <div className="audit-actions">
                 <button type="button" className="secondary-btn small-btn">Review logs</button>
                 <button type="button" className="primary-btn small-btn">Approve checklist</button>
+              </div>
+
+              <div className="recommendation-grid">
+                {complianceRecommendations.map((item) => (
+                  <div key={item.label} className={`recommendation-card ${item.tone}`}>
+                    <span>{item.label}</span>
+                    <strong>{item.value}</strong>
+                  </div>
+                ))}
               </div>
             </div>
           </div>
