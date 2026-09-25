@@ -350,6 +350,20 @@ const intelligenceInsights = [
   { label: 'Recommended action', value: 'Shift 2 agents to KYC', tone: 'amber' },
 ]
 
+const reportTemplates = [
+  { name: 'Daily Operations Summary', format: 'PDF', lastRun: 'Today, 09:30 AM' },
+  { name: 'Staff Productivity Report', format: 'Excel', lastRun: 'Yesterday, 18:10 PM' },
+  { name: 'Branch SLA Snapshot', format: 'CSV', lastRun: 'Today, 08:45 AM' },
+  { name: 'No-Show Analysis', format: 'PDF', lastRun: '3 days ago' },
+]
+
+const reportMetrics = [
+  { label: 'Today revenue impact', value: '₹4.8L', tone: 'blue' },
+  { label: 'SLA compliance', value: '96%', tone: 'green' },
+  { label: 'Escalations', value: '03', tone: 'amber' },
+  { label: 'Export readiness', value: 'Ready', tone: 'purple' },
+]
+
 function App() {
   const [staff, setStaff] = useState(initialStaff)
   const [counters, setCounters] = useState(initialCounters)
@@ -1959,6 +1973,97 @@ function App() {
                 <strong>{item.value}</strong>
               </div>
             ))}
+          </div>
+        </section>
+
+        <section className="report-panel panel">
+          <div className="panel-header">
+            <div>
+              <p className="eyebrow">Master form 10</p>
+              <h3>Reports &amp; Export Center</h3>
+            </div>
+            <span className="tag success">Operational reporting</span>
+          </div>
+
+          <div className="report-metrics">
+            {reportMetrics.map((item) => (
+              <article key={item.label} className={`summary-card ${item.tone}`}>
+                <span>{item.label}</span>
+                <strong>{item.value}</strong>
+              </article>
+            ))}
+          </div>
+
+          <div className="report-layout">
+            <div className="panel report-list-panel">
+              <div className="panel-header compact-header">
+                <h3>Report templates</h3>
+              </div>
+              <div className="report-list">
+                {reportTemplates.map((report) => (
+                  <div key={report.name} className="report-card">
+                    <div>
+                      <strong>{report.name}</strong>
+                      <small>{report.lastRun}</small>
+                    </div>
+                    <span>{report.format}</span>
+                  </div>
+                ))}
+              </div>
+            </div>
+
+            <div className="panel report-detail-panel">
+              <div className="panel-header compact-header">
+                <h3>Export summary</h3>
+              </div>
+
+              <div className="export-box">
+                <div>
+                  <span className="queue-title">Selected report</span>
+                  <strong>Daily Operations Summary</strong>
+                </div>
+                <div className="export-actions">
+                  <button type="button" className="secondary-btn small-btn">Download PDF</button>
+                  <button type="button" className="primary-btn small-btn">Export CSV</button>
+                </div>
+              </div>
+
+              <div className="field-grid report-filters">
+                <label>
+                  Date range
+                  <select defaultValue="Today">
+                    <option>Today</option>
+                    <option>This week</option>
+                    <option>This month</option>
+                  </select>
+                </label>
+                <label>
+                  Branch
+                  <select defaultValue="All branches">
+                    <option>All branches</option>
+                    <option>Noida Sector 18</option>
+                    <option>Greater Noida</option>
+                    <option>Delhi Central</option>
+                  </select>
+                </label>
+                <label>
+                  Format
+                  <select defaultValue="PDF">
+                    <option>PDF</option>
+                    <option>Excel</option>
+                    <option>CSV</option>
+                  </select>
+                </label>
+                <label>
+                  Recipients
+                  <select defaultValue="Operations team">
+                    <option>Operations team</option>
+                    <option>Branch managers</option>
+                    <option>Finance</option>
+                  </select>
+                </label>
+              </div>
+            </div>
           </div>
         </section>
 
