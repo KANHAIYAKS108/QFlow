@@ -599,6 +599,156 @@ textarea:focus {
   font-weight: 600;
 }
 
+.appointment-panel {
+  margin-top: 20px;
+}
+
+.queue-flow {
+  display: flex;
+  align-items: center;
+  flex-wrap: wrap;
+  gap: 10px;
+  margin: 16px 0 22px;
+}
+
+.flow-node {
+  border: 1px solid #dbeafe;
+  background: linear-gradient(135deg, #eff6ff, #ecfeff);
+  color: #0f172a;
+  border-radius: 999px;
+  padding: 8px 12px;
+  font-size: 0.78rem;
+  font-weight: 700;
+}
+
+.flow-arrow {
+  color: #64748b;
+  font-size: 1.1rem;
+  font-weight: 700;
+}
+
+.appointment-layout {
+  display: grid;
+  grid-template-columns: 0.8fr 1.2fr;
+  gap: 18px;
+}
+
+.appointment-list {
+  display: flex;
+  flex-direction: column;
+  gap: 12px;
+}
+
+.appointment-card {
+  width: 100%;
+  background: #f8fafc;
+  border: 1px solid #e2e8f0;
+  border-radius: 16px;
+  text-align: left;
+  padding: 14px 16px;
+  color: #0f172a;
+}
+
+.appointment-card.selected {
+  background: linear-gradient(135deg, rgba(59, 130, 246, 0.08), rgba(14, 165, 233, 0.1));
+  border-color: rgba(59, 130, 246, 0.35);
+}
+
+.appointment-card-head {
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  gap: 12px;
+  margin-bottom: 8px;
+}
+
+.appointment-card small,
+.appointment-card p {
+  color: #475569;
+}
+
+.appointment-card p {
+  margin: 8px 0 0;
+}
+
+.appointment-status {
+  display: inline-flex;
+  padding: 5px 8px;
+  border-radius: 999px;
+  font-size: 0.64rem;
+  font-weight: 700;
+  letter-spacing: 0.05em;
+  text-transform: uppercase;
+}
+
+.appointment-status.confirmed {
+  background: #dcfce7;
+  color: #166534;
+}
+
+.appointment-status.checked-in,
+.appointment-status.in-service {
+  background: #dbeafe;
+  color: #1d4ed8;
+}
+
+.appointment-status.scheduled {
+  background: #fef3c7;
+  color: #92400e;
+}
+
+.appointment-status.completed {
+  background: #ede9fe;
+  color: #5b21b6;
+}
+
+.appointment-status.cancelled,
+.appointment-status.no-show {
+  background: #fee2e2;
+  color: #b91c1c;
+}
+
+.appointment-focus {
+  display: grid;
+  grid-template-columns: repeat(3, minmax(0, 1fr));
+  gap: 12px;
+  margin-bottom: 18px;
+}
+
+.queue-box {
+  margin-top: 22px;
+  background: linear-gradient(135deg, rgba(14, 165, 233, 0.08), rgba(59, 130, 246, 0.12));
+  border: 1px solid rgba(59, 130, 246, 0.15);
+  border-radius: 18px;
+  padding: 18px;
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  gap: 16px;
+}
+
+.queue-box > div {
+  display: flex;
+  flex-direction: column;
+  gap: 8px;
+}
+
+.queue-title {
+  letter-spacing: 0.08em;
+  text-transform: uppercase;
+  color: #475569;
+  font-size: 0.72rem;
+  font-weight: 700;
+}
+
+.queue-box strong {
+  color: #0f172a;
+}
+
+.small-btn {
+  padding: 10px 14px;
+}
+
 @media (max-width: 980px) {
   .qflow-app {
     grid-template-columns: 1fr;
@@ -610,16 +760,19 @@ textarea:focus {
 
   .stats-grid,
   .staff-layout,
+  .appointment-layout,
   .field-grid,
   .counter-grid,
-  .staff-focus {
+  .staff-focus,
+  .appointment-focus {
     grid-template-columns: 1fr;
   }
 
   .hero-banner,
   .top-bar,
   .panel-header,
-  .catalog-actions {
+  .catalog-actions,
+  .queue-box {
     flex-direction: column;
     align-items: flex-start;
   }

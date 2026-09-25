@@ -80,6 +80,52 @@ const initialCounters = [
   },
 ]
 
+const initialAppointments = [
+  {
+    id: 1,
+    customer: 'Neha Kapoor',
+    location: 'Noida Sector 18',
+    service: 'Account Opening',
+    date: '2026-09-28',
+    timeSlot: '10:30 AM',
+    appointmentType: 'In-person',
+    status: 'Confirmed',
+    reminderSchedule: '24h before + 2h before',
+  },
+  {
+    id: 2,
+    customer: 'Rahul Mehta',
+    location: 'Delhi Central',
+    service: 'Loan Consultation',
+    date: '2026-09-28',
+    timeSlot: '12:00 PM',
+    appointmentType: 'Virtual',
+    status: 'Checked-In',
+    reminderSchedule: '1h before',
+  },
+  {
+    id: 3,
+    customer: 'Sana Ali',
+    location: 'Greater Noida',
+    service: 'KYC',
+    date: '2026-09-29',
+    timeSlot: '09:15 AM',
+    appointmentType: 'Priority',
+    status: 'Scheduled',
+    reminderSchedule: 'Same-day confirmation',
+  },
+]
+
+const appointmentStatusOptions = [
+  'Scheduled',
+  'Confirmed',
+  'Checked-In',
+  'In-Service',
+  'Completed',
+  'Cancelled',
+  'No-Show',
+]
+
 const overviewStats = [
   { label: 'On-duty staff', value: '18', change: '+2 this week', tone: 'blue' },
   { label: 'Active counters', value: '11', change: '4 under watch', tone: 'green' },
@@ -90,8 +136,11 @@ const overviewStats = [
 function App() {
   const [staff, setStaff] = useState(initialStaff)
   const [counters, setCounters] = useState(initialCounters)
+  const [appointments, setAppointments] = useState(initialAppointments)
   const [selectedStaffId, setSelectedStaffId] = useState(initialStaff[0].id)
+  const [selectedAppointmentId, setSelectedAppointmentId] = useState(initialAppointments[0].id)
   const [staffFilter, setStaffFilter] = useState('All')
+  const [appointmentFilter, setAppointmentFilter] = useState('All')
 
   const filteredStaff = useMemo(
     () =>
@@ -169,6 +218,46 @@ function App() {
     }
 
     setCounters((previous) => [...previous, newCounter])
+  }
+
+  const filteredAppointments = useMemo(
+    () =>
+      appointmentFilter === 'All'
+        ? appointments
+        : appointments.filter((appointment) => appointment.status === appointmentFilter),
+    [appointmentFilter, appointments],
+  )
+
+  const selectedAppointment = useMemo(
+    () =>
+      appointments.find((appointment) => appointment.id === selectedAppointmentId) ??
+      appointments[0],
+    [appointments, selectedAppointmentId],
+  )
+
+  const updateSelectedAppointment = (field, value) => {
+    setAppointments((previous) =>
+      previous.map((appointment) =>
+        appointment.id === selectedAppointmentId ? { ...appointment, [field]: value } : appointment,
+      ),
+    )
+  }
+
+  const addAppointment = () => {
+    const newAppointment = {
+      id: Date.now(),
+      customer: 'New Visitor',
+      location: 'Noida Sector 18',
+      service: 'KYC',
+      date: '2026-09-30',
+      timeSlot: '11:00 AM',
+      appointmentType: 'In-person',
+      status: 'Scheduled',
+      reminderSchedule: '2h before',
+    }
+
+    setAppointments((previous) => [newAppointment, ...previous])
+    setSelectedAppointmentId(newAppointment.id)
   }
 
   return (
@@ -519,6 +608,186 @@ function App() {
                 </div>
               </div>
             ))}
+          </div>
+        </section>
+
+        <section className="appointment-panel panel">
+          <div className="panel-header">
+            <div>
+              <p className="eyebrow">Master form 4</p>
+              <h3>Appointment Master</h3>
+            </div>
+            <button type="button" className="mini-btn" onClick={addAppointment}>
+              + Add appointment
+            </button>
+          </div>
+
+          <div className="queue-flow">
+            <div className="flow-node">Appointment</div>
+            <span className="flow-arrow">→</span>
+            <div className="flow-node">Check-in</div>
+            <span className="flow-arrow">→</span>
+            <div className="flow-node">Queue Ticket</div>
+            <span className="flow-arrow">→</span>
+            <div className="flow-node">Unified Queue</div>
+          </div>
+
+          <div className="appointment-layout">
+            <div className="panel appointment-list-panel">
+              <div className="catalog-actions">
+                <select
+                  value={appointmentFilter}
+                  onChange={(event) => setAppointmentFilter(event.target.value)}
+                >
+                  <option value="All">All statuses</option>
+                  {appointmentStatusOptions.map((status) => (
+                    <option key={status} value={status}>
+                      {status}
+                    </option>
+                  ))}
+                </select>
+                <span className="catalog-count">{filteredAppointments.length} bookings</span>
+              </div>
+
+              <div className="appointment-list">
+                {filteredAppointments.map((appointment) => (
+                  <button
+                    key={appointment.id}
+                    type="button"
+                    className={`appointment-card ${appointment.id === selectedAppointment?.id ? 'selected' : ''}`}
+                    onClick={() => setSelectedAppointmentId(appointment.id)}
+                  >
+                    <div className="appointment-card-head">
+                      <strong>{appointment.customer}</strong>
+                      <span className={`appointment-status ${appointment.status.toLowerCase().replace(/\s+/g, '-')}`}>
+                        {appointment.status}
+                      </span>
+                    </div>
+                    <small>
+                      {appointment.service} • {appointment.location}
+                    </small>
+                    <p>
+                      {appointment.date} • {appointment.timeSlot}
+                    </p>
+                  </button>
+                ))}
+              </div>
+            </div>
+
+            <div className="panel appointment-detail-panel">
+              <div className="panel-header">
+                <h3>Appointment details</h3>
+                <span className="tag success">{selectedAppointment.status}</span>
+              </div>
+
+              <div className="appointment-focus">
+                <div className="focus-pill">
+                  <span>Customer</span>
+                  <strong>{selectedAppointment.customer}</strong>
+                </div>
+                <div className="focus-pill">
+                  <span>Service</span>
+                  <strong>{selectedAppointment.service}</strong>
+                </div>
+                <div className="focus-pill">
+                  <span>Type</span>
+                  <strong>{selectedAppointment.appointmentType}</strong>
+                </div>
+              </div>
+
+              <div className="field-grid">
+                <label>
+                  Customer
+                  <input
+                    type="text"
+                    value={selectedAppointment.customer}
+                    onChange={(event) => updateSelectedAppointment('customer', event.target.value)}
+                  />
+                </label>
+                <label>
+                  Location
+                  <select
+                    value={selectedAppointment.location}
+                    onChange={(event) => updateSelectedAppointment('location', event.target.value)}
+                  >
+                    {branchOptions.map((branch) => (
+                      <option key={branch}>{branch}</option>
+                    ))}
+                  </select>
+                </label>
+                <label>
+                  Service
+                  <select
+                    value={selectedAppointment.service}
+                    onChange={(event) => updateSelectedAppointment('service', event.target.value)}
+                  >
+                    {serviceOptions.map((service) => (
+                      <option key={service}>{service}</option>
+                    ))}
+                  </select>
+                </label>
+                <label>
+                  Appointment Type
+                  <select
+                    value={selectedAppointment.appointmentType}
+                    onChange={(event) =>
+                      updateSelectedAppointment('appointmentType', event.target.value)
+                    }
+                  >
+                    <option>In-person</option>
+                    <option>Virtual</option>
+                    <option>Priority</option>
+                  </select>
+                </label>
+                <label>
+                  Date
+                  <input
+                    type="date"
+                    value={selectedAppointment.date}
+                    onChange={(event) => updateSelectedAppointment('date', event.target.value)}
+                  />
+                </label>
+                <label>
+                  Time Slot
+                  <input
+                    type="text"
+                    value={selectedAppointment.timeSlot}
+                    onChange={(event) => updateSelectedAppointment('timeSlot', event.target.value)}
+                  />
+                </label>
+                <label>
+                  Status
+                  <select
+                    value={selectedAppointment.status}
+                    onChange={(event) => updateSelectedAppointment('status', event.target.value)}
+                  >
+                    {appointmentStatusOptions.map((status) => (
+                      <option key={status}>{status}</option>
+                    ))}
+                  </select>
+                </label>
+                <label>
+                  Reminder Schedule
+                  <input
+                    type="text"
+                    value={selectedAppointment.reminderSchedule}
+                    onChange={(event) =>
+                      updateSelectedAppointment('reminderSchedule', event.target.value)
+                    }
+                  />
+                </label>
+              </div>
+
+              <div className="queue-box">
+                <div>
+                  <span className="queue-title">Queue generation</span>
+                  <strong>Appointment → Check-in → Queue Ticket → Unified Queue</strong>
+                </div>
+                <button type="button" className="primary-btn small-btn">
+                  Generate queue entry
+                </button>
+              </div>
+            </div>
           </div>
         </section>
       </main>
