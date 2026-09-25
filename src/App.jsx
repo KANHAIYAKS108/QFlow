@@ -92,6 +92,8 @@ const initialAppointments = [
     status: 'Confirmed',
     reminderSchedule: '24h before + 2h before',
     priorityLevel: 'High',
+    source: 'Website',
+    notes: 'Needs passport and address proof ready.',
     queueGenerated: true,
   },
   {
@@ -105,6 +107,8 @@ const initialAppointments = [
     status: 'Checked-In',
     reminderSchedule: '1h before',
     priorityLevel: 'Normal',
+    source: 'Call center',
+    notes: 'Digital meeting link already shared.',
     queueGenerated: true,
   },
   {
@@ -118,6 +122,8 @@ const initialAppointments = [
     status: 'Scheduled',
     reminderSchedule: 'Same-day confirmation',
     priorityLevel: 'VIP',
+    source: 'Branch walk-in',
+    notes: 'Request priority lane and quick verification.',
     queueGenerated: false,
   },
 ]
@@ -268,6 +274,8 @@ function App() {
       status: 'Scheduled',
       reminderSchedule: '2h before',
       priorityLevel: 'Normal',
+      source: 'Website',
+      notes: 'Awaiting customer confirmation.',
       queueGenerated: false,
     }
 
@@ -826,6 +834,26 @@ function App() {
                     onChange={(event) =>
                       updateSelectedAppointment('reminderSchedule', event.target.value)
                     }
+                  />
+                </label>
+                <label>
+                  Source
+                  <select
+                    value={selectedAppointment.source}
+                    onChange={(event) => updateSelectedAppointment('source', event.target.value)}
+                  >
+                    <option>Website</option>
+                    <option>Call center</option>
+                    <option>Branch walk-in</option>
+                    <option>Mobile app</option>
+                  </select>
+                </label>
+                <label className="full-width">
+                  Notes
+                  <textarea
+                    rows="3"
+                    value={selectedAppointment.notes}
+                    onChange={(event) => updateSelectedAppointment('notes', event.target.value)}
                   />
                 </label>
               </div>
