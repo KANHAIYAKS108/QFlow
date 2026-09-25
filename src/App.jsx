@@ -278,6 +278,72 @@ const notificationEvents = [
 
 const notificationChannels = ['Browser', 'Push', 'Email', 'SMS', 'WhatsApp']
 
+const analyticsKpis = [
+  { label: 'Customers Served', value: '842', change: '+18% vs yesterday', tone: 'blue' },
+  { label: 'Waiting', value: '37', change: '-6 from peak', tone: 'amber' },
+  { label: 'Average Wait', value: '14m', change: '2m below target', tone: 'purple' },
+  { label: 'Average Service', value: '8m', change: 'steady across lane', tone: 'green' },
+  { label: 'No Shows', value: '5.8%', change: 'lower than weekly avg', tone: 'red' },
+  { label: 'Completion Rate', value: '94%', change: 'above SLA', tone: 'blue' },
+]
+
+const analyticsCharts = [
+  {
+    title: 'Hourly Traffic',
+    values: [36, 42, 58, 66, 76, 82, 71, 60, 48, 39],
+    unit: 'customers',
+    max: 90,
+  },
+  {
+    title: 'Service Duration',
+    values: [18, 24, 28, 32, 36, 44, 39, 31, 27, 22],
+    unit: 'minutes',
+    max: 50,
+  },
+  {
+    title: 'Wait Time',
+    values: [12, 16, 20, 24, 18, 12, 10, 8, 11, 15],
+    unit: 'minutes',
+    max: 30,
+  },
+  {
+    title: 'Staff Performance',
+    values: [72, 81, 78, 89, 91, 84, 88, 94, 90, 87],
+    unit: '%',
+    max: 100,
+  },
+  {
+    title: 'Branch Performance',
+    values: [68, 74, 79, 82, 86, 88, 90, 84, 80, 76],
+    unit: '%',
+    max: 100,
+  },
+  {
+    title: 'Appointment Utilization',
+    values: [44, 48, 52, 63, 70, 78, 82, 75, 68, 58],
+    unit: '%',
+    max: 100,
+  },
+  {
+    title: 'No-Show Rate',
+    values: [6, 7, 8, 9, 8, 7, 6, 5, 4, 6],
+    unit: '%',
+    max: 12,
+  },
+  {
+    title: 'Peak Hours',
+    values: [16, 22, 30, 36, 54, 72, 84, 66, 42, 28],
+    unit: 'traffic',
+    max: 90,
+  },
+  {
+    title: 'Queue Abandonment',
+    values: [4, 6, 7, 9, 11, 10, 8, 6, 5, 4],
+    unit: '%',
+    max: 15,
+  },
+]
+
 function App() {
   const [staff, setStaff] = useState(initialStaff)
   const [counters, setCounters] = useState(initialCounters)
@@ -1840,6 +1906,44 @@ function App() {
                 </button>
               </div>
             </div>
+          </div>
+        </section>
+
+        <section className="analytics-panel panel">
+          <div className="panel-header">
+            <div>
+              <p className="eyebrow">Master form 9</p>
+              <h3>Analytics &amp; Intelligence</h3>
+            </div>
+            <span className="tag success">Dashboard live</span>
+          </div>
+
+          <div className="kpi-grid">
+            {analyticsKpis.map((item) => (
+              <article key={item.label} className={`stat-card ${item.tone}`}>
+                <span>{item.label}</span>
+                <strong>{item.value}</strong>
+                <small>{item.change}</small>
+              </article>
+            ))}
+          </div>
+
+          <div className="charts-grid">
+            {analyticsCharts.map((chart) => (
+              <div key={chart.title} className="chart-card">
+                <div className="chart-head">
+                  <h4>{chart.title}</h4>
+                  <span>{chart.unit}</span>
+                </div>
+                <div className="bars" aria-label={chart.title}>
+                  {chart.values.map((value, index) => (
+                    <div key={`${chart.title}-${index}`} className="bar-wrap">
+                      <span className="bar" style={{ height: `${(value / chart.max) * 100}%` }} />
+                    </div>
+                  ))}
+                </div>
+              </div>
+            ))}
           </div>
         </section>
 
