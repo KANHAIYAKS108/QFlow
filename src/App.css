@@ -1314,6 +1314,23 @@ textarea:focus {
   text-transform: uppercase;
 }
 
+.journey-sequence {
+  margin-top: 12px;
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  gap: 8px;
+  flex-wrap: wrap;
+  color: #1d4ed8;
+  font-weight: 700;
+}
+
+.journey-note {
+  margin-top: 12px;
+  color: #475569;
+  font-size: 0.78rem;
+}
+
 .journey-time {
   margin-top: 8px;
   font-size: 1.3rem;

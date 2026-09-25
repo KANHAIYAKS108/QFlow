@@ -1728,6 +1728,16 @@ function App() {
               <div className="journey-return">Return by approximately</div>
               <div className="journey-time">{customerPosition === 1 ? 'Now' : '11:42 AM'}</div>
               <div className="journey-status">{journeyStatus}</div>
+              <div className="journey-sequence" aria-label="Queue position changes">
+                <span>#7</span>
+                <span>↓</span>
+                <span>#6</span>
+                <span>↓</span>
+                <span>#5</span>
+                <span>↓</span>
+                <span>...</span>
+              </div>
+              <div className="journey-note">WebSocket-ready updates: queue position refreshes in real time.</div>
               <div className="journey-actions">
                 <button type="button" className="secondary-btn small-btn" onClick={() => setJourneyStatus('Queue left successfully')}>
                   LEAVE QUEUE
