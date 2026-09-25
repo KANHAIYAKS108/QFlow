@@ -679,6 +679,11 @@ textarea:focus {
   text-align: left;
   padding: 14px 16px;
   color: #0f172a;
+  transition: transform 0.2s ease, box-shadow 0.2s ease;
+}
+
+.appointment-card:hover {
+  transform: translateY(-1px);
 }
 
 .appointment-card.selected {
@@ -757,6 +762,7 @@ textarea:focus {
   align-items: center;
   justify-content: space-between;
   gap: 16px;
+  flex-wrap: wrap;
 }
 
 .queue-box > div {
