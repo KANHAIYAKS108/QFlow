@@ -152,14 +152,102 @@ const appointmentSummary = [
   { label: 'Priority', value: '4', change: 'high urgency', tone: 'purple' },
 ]
 
+const initialTickets = [
+  {
+    id: 1,
+    ticketId: 'QF-1001',
+    ticketNumber: 'T-201',
+    customerId: 'CUST-2451',
+    organization: 'QFlow Banking',
+    location: 'Noida Sector 18',
+    service: 'Account Opening',
+    source: 'Appointment',
+    priority: 'High',
+    createdAt: '2026-09-25 09:45',
+    checkInAt: '2026-09-25 10:12',
+    queuePosition: 3,
+    estimatedWait: '12 min',
+    status: 'Waiting',
+    assignedCounter: 'Counter 01',
+    assignedStaff: 'Aarav Sharma',
+    calledAt: '2026-09-25 10:18',
+    serviceStartedAt: '',
+    serviceCompletedAt: '',
+  },
+  {
+    id: 2,
+    ticketId: 'QF-1002',
+    ticketNumber: 'T-202',
+    customerId: 'CUST-1187',
+    organization: 'QFlow Finance',
+    location: 'Delhi Central',
+    service: 'Loan Consultation',
+    source: 'QR',
+    priority: 'Normal',
+    createdAt: '2026-09-25 10:03',
+    checkInAt: '2026-09-25 10:10',
+    queuePosition: 1,
+    estimatedWait: '5 min',
+    status: 'Called',
+    assignedCounter: 'Counter 02',
+    assignedStaff: 'Priya Nair',
+    calledAt: '2026-09-25 10:16',
+    serviceStartedAt: '2026-09-25 10:20',
+    serviceCompletedAt: '',
+  },
+  {
+    id: 3,
+    ticketId: 'QF-1003',
+    ticketNumber: 'T-203',
+    customerId: 'CUST-7820',
+    organization: 'QFlow KYC',
+    location: 'Greater Noida',
+    service: 'KYC',
+    source: 'Walk-in',
+    priority: 'VIP',
+    createdAt: '2026-09-25 10:20',
+    checkInAt: '2026-09-25 10:26',
+    queuePosition: 2,
+    estimatedWait: '8 min',
+    status: 'Notified',
+    assignedCounter: 'Counter 03',
+    assignedStaff: 'Rohit Verma',
+    calledAt: '',
+    serviceStartedAt: '',
+    serviceCompletedAt: '',
+  },
+]
+
+const queueStatusOptions = [
+  'Waiting',
+  'Notified',
+  'Called',
+  'Serving',
+  'Completed',
+  'Skipped',
+  'Cancelled',
+  'No-Show',
+  'Transferred',
+]
+
+const queueSummary = [
+  { label: 'Live tickets', value: '128', change: 'across all branches', tone: 'blue' },
+  { label: 'Waiting now', value: '34', change: '10 high-priority', tone: 'green' },
+  { label: 'Avg wait', value: '11 min', change: 'down 2 min', tone: 'amber' },
+  { label: 'Serving', value: '18', change: 'currently active', tone: 'purple' },
+]
+
 function App() {
   const [staff, setStaff] = useState(initialStaff)
   const [counters, setCounters] = useState(initialCounters)
   const [appointments, setAppointments] = useState(initialAppointments)
+  const [tickets, setTickets] = useState(initialTickets)
   const [selectedStaffId, setSelectedStaffId] = useState(initialStaff[0].id)
   const [selectedAppointmentId, setSelectedAppointmentId] = useState(initialAppointments[0].id)
+  const [selectedTicketId, setSelectedTicketId] = useState(initialTickets[0].id)
   const [staffFilter, setStaffFilter] = useState('All')
   const [appointmentFilter, setAppointmentFilter] = useState('All')
+  const [ticketFilter, setTicketFilter] = useState('All')
 
   const filteredStaff = useMemo(
     () =>
@@ -291,6 +379,54 @@ function App() {
           : appointment,
       ),
     )
+  }
+
+  const filteredTickets = useMemo(
+    () =>
+      ticketFilter === 'All'
+        ? tickets
+        : tickets.filter((ticket) => ticket.status === ticketFilter),
+    [ticketFilter, tickets],
+  )
+
+  const selectedTicket = useMemo(
+    () => tickets.find((ticket) => ticket.id === selectedTicketId) ?? tickets[0],
+    [selectedTicketId, tickets],
+  )
+
+  const updateSelectedTicket = (field, value) => {
+    setTickets((previous) =>
+      previous.map((ticket) =>
+        ticket.id === selectedTicketId ? { ...ticket, [field]: value } : ticket,
+      ),
+    )
+  }
+
+  const addTicket = () => {
+    const newTicket = {
+      id: Date.now(),
+      ticketId: `QF-${String(tickets.length + 1005)}`,
+      ticketNumber: `T-${String(tickets.length + 210).padStart(3, '0')}`,
+      customerId: `CUST-${String(tickets.length + 3000)}`,
+      organization: 'QFlow Banking',
+      location: 'Noida Sector 18',
+      service: 'KYC',
+      source: 'Web',
+      priority: 'Normal',
+      createdAt: '2026-09-25 11:00',
+      checkInAt: '2026-09-25 11:05',
+      queuePosition: tickets.length + 1,
+      estimatedWait: '15 min',
+      status: 'Waiting',
+      assignedCounter: 'Counter 01',
+      assignedStaff: 'Aarav Sharma',
+      calledAt: '',
+      serviceStartedAt: '',
+      serviceCompletedAt: '',
+    }
+
+    setTickets((previous) => [newTicket, ...previous])
+    setSelectedTicketId(newTicket.id)
   }
 
   return (
@@ -870,6 +1006,281 @@ function App() {
                 <button type="button" className="primary-btn small-btn" onClick={toggleQueueGeneration}>
                   {selectedAppointment.queueGenerated ? 'Remove queue' : 'Generate queue entry'}
                 </button>
+              </div>
+            </div>
+          </div>
+        </section>
+
+        <section className="ticket-panel panel">
+          <div className="panel-header">
+            <div>
+              <p className="eyebrow">Master form 5</p>
+              <h3>Queue / Ticket Master</h3>
+            </div>
+            <button type="button" className="mini-btn" onClick={addTicket}>
+              + Add ticket
+            </button>
+          </div>
+
+          <div className="queue-flow">
+            <div className="flow-node">Ticket</div>
+            <span className="flow-arrow">→</span>
+            <div className="flow-node">Check-in</div>
+            <span className="flow-arrow">→</span>
+            <div className="flow-node">Called</div>
+            <span className="flow-arrow">→</span>
+            <div className="flow-node">Serving</div>
+            <span className="flow-arrow">→</span>
+            <div className="flow-node">Completed</div>
+          </div>
+
+          <div className="appointment-stats">
+            {queueSummary.map((stat) => (
+              <article key={stat.label} className={`summary-card ${stat.tone}`}>
+                <span>{stat.label}</span>
+                <strong>{stat.value}</strong>
+                <small>{stat.change}</small>
+              </article>
+            ))}
+          </div>
+
+          <div className="appointment-layout">
+            <div className="panel appointment-list-panel">
+              <div className="catalog-actions">
+                <select value={ticketFilter} onChange={(event) => setTicketFilter(event.target.value)}>
+                  <option value="All">All statuses</option>
+                  {queueStatusOptions.map((status) => (
+                    <option key={status} value={status}>
+                      {status}
+                    </option>
+                  ))}
+                </select>
+                <span className="catalog-count">{filteredTickets.length} tickets</span>
+              </div>
+
+              <div className="appointment-list">
+                {filteredTickets.map((ticket) => (
+                  <button
+                    key={ticket.id}
+                    type="button"
+                    className={`appointment-card ${ticket.id === selectedTicket?.id ? 'selected' : ''}`}
+                    onClick={() => setSelectedTicketId(ticket.id)}
+                  >
+                    <div className="appointment-card-head">
+                      <strong>{ticket.ticketId}</strong>
+                      <span className={`appointment-status ${ticket.status.toLowerCase().replace(/\s+/g, '-')}`}>
+                        {ticket.status}
+                      </span>
+                    </div>
+                    <small>
+                      {ticket.service} • {ticket.location}
+                    </small>
+                    <p>
+                      {ticket.customerId} • Queue #{ticket.queuePosition}
+                    </p>
+                  </button>
+                ))}
+              </div>
+            </div>
+
+            <div className="panel appointment-detail-panel">
+              <div className="panel-header">
+                <h3>Ticket details</h3>
+                <span className="tag success">{selectedTicket.status}</span>
+              </div>
+
+              <div className="appointment-focus">
+                <div className="focus-pill">
+                  <span>Ticket ID</span>
+                  <strong>{selectedTicket.ticketId}</strong>
+                </div>
+                <div className="focus-pill">
+                  <span>Customer</span>
+                  <strong>{selectedTicket.customerId}</strong>
+                </div>
+                <div className="focus-pill">
+                  <span>Service</span>
+                  <strong>{selectedTicket.service}</strong>
+                </div>
+                <div className="focus-pill">
+                  <span>Priority</span>
+                  <strong>{selectedTicket.priority}</strong>
+                </div>
+              </div>
+
+              <div className="field-grid">
+                <label>
+                  Ticket ID
+                  <input
+                    type="text"
+                    value={selectedTicket.ticketId}
+                    onChange={(event) => updateSelectedTicket('ticketId', event.target.value)}
+                  />
+                </label>
+                <label>
+                  Ticket Number
+                  <input
+                    type="text"
+                    value={selectedTicket.ticketNumber}
+                    onChange={(event) => updateSelectedTicket('ticketNumber', event.target.value)}
+                  />
+                </label>
+                <label>
+                  Customer ID
+                  <input
+                    type="text"
+                    value={selectedTicket.customerId}
+                    onChange={(event) => updateSelectedTicket('customerId', event.target.value)}
+                  />
+                </label>
+                <label>
+                  Organization
+                  <input
+                    type="text"
+                    value={selectedTicket.organization}
+                    onChange={(event) => updateSelectedTicket('organization', event.target.value)}
+                  />
+                </label>
+                <label>
+                  Location
+                  <select
+                    value={selectedTicket.location}
+                    onChange={(event) => updateSelectedTicket('location', event.target.value)}
+                  >
+                    {branchOptions.map((branch) => (
+                      <option key={branch}>{branch}</option>
+                    ))}
+                  </select>
+                </label>
+                <label>
+                  Service
+                  <select
+                    value={selectedTicket.service}
+                    onChange={(event) => updateSelectedTicket('service', event.target.value)}
+                  >
+                    {serviceOptions.map((service) => (
+                      <option key={service}>{service}</option>
+                    ))}
+                  </select>
+                </label>
+                <label>
+                  Source
+                  <select
+                    value={selectedTicket.source}
+                    onChange={(event) => updateSelectedTicket('source', event.target.value)}
+                  >
+                    <option>Walk-in</option>
+                    <option>QR</option>
+                    <option>Web</option>
+                    <option>Appointment</option>
+                    <option>Kiosk</option>
+                    <option>Staff</option>
+                  </select>
+                </label>
+                <label>
+                  Priority
+                  <select
+                    value={selectedTicket.priority}
+                    onChange={(event) => updateSelectedTicket('priority', event.target.value)}
+                  >
+                    <option>Normal</option>
+                    <option>High</option>
+                    <option>VIP</option>
+                  </select>
+                </label>
+                <label>
+                  Created At
+                  <input
+                    type="text"
+                    value={selectedTicket.createdAt}
+                    onChange={(event) => updateSelectedTicket('createdAt', event.target.value)}
+                  />
+                </label>
+                <label>
+                  Check-in At
+                  <input
+                    type="text"
+                    value={selectedTicket.checkInAt}
+                    onChange={(event) => updateSelectedTicket('checkInAt', event.target.value)}
+                  />
+                </label>
+                <label>
+                  Queue Position
+                  <input
+                    type="number"
+                    value={selectedTicket.queuePosition}
+                    onChange={(event) =>
+                      updateSelectedTicket('queuePosition', Number(event.target.value))
+                    }
+                  />
+                </label>
+                <label>
+                  Estimated Wait
+                  <input
+                    type="text"
+                    value={selectedTicket.estimatedWait}
+                    onChange={(event) => updateSelectedTicket('estimatedWait', event.target.value)}
+                  />
+                </label>
+                <label>
+                  Status
+                  <select
+                    value={selectedTicket.status}
+                    onChange={(event) => updateSelectedTicket('status', event.target.value)}
+                  >
+                    {queueStatusOptions.map((status) => (
+                      <option key={status}>{status}</option>
+                    ))}
+                  </select>
+                </label>
+                <label>
+                  Assigned Counter
+                  <select
+                    value={selectedTicket.assignedCounter}
+                    onChange={(event) => updateSelectedTicket('assignedCounter', event.target.value)}
+                  >
+                    {counters.map((counter) => (
+                      <option key={counter.id}>{counter.name}</option>
+                    ))}
+                  </select>
+                </label>
+                <label>
+                  Assigned Staff
+                  <select
+                    value={selectedTicket.assignedStaff}
+                    onChange={(event) => updateSelectedTicket('assignedStaff', event.target.value)}
+                  >
+                    {staff.map((member) => (
+                      <option key={member.id}>{member.name}</option>
+                    ))}
+                  </select>
+                </label>
+                <label>
+                  Called At
+                  <input
+                    type="text"
+                    value={selectedTicket.calledAt}
+                    onChange={(event) => updateSelectedTicket('calledAt', event.target.value)}
+                  />
+                </label>
+                <label>
+                  Service Started At
+                  <input
+                    type="text"
+                    value={selectedTicket.serviceStartedAt}
+                    onChange={(event) => updateSelectedTicket('serviceStartedAt', event.target.value)}
+                  />
+                </label>
+                <label>
+                  Service Completed At
+                  <input
+                    type="text"
+                    value={selectedTicket.serviceCompletedAt}
+                    onChange={(event) =>
+                      updateSelectedTicket('serviceCompletedAt', event.target.value)
+                    }
+                  />
+                </label>
               </div>
             </div>
           </div>
