@@ -1414,6 +1414,18 @@ textarea:focus {
     align-items: flex-start;
   }
 
+  .journey-card {
+    padding: 20px 16px;
+  }
+
+  .journey-actions {
+    flex-direction: column;
+  }
+
+  .journey-actions button {
+    width: 100%;
+  }
+
   .hero-badges {
     justify-content: flex-start;
   }
