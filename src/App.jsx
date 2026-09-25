@@ -91,6 +91,7 @@ const initialAppointments = [
     appointmentType: 'In-person',
     status: 'Confirmed',
     reminderSchedule: '24h before + 2h before',
+    priorityLevel: 'High',
     queueGenerated: true,
   },
   {
@@ -103,6 +104,7 @@ const initialAppointments = [
     appointmentType: 'Virtual',
     status: 'Checked-In',
     reminderSchedule: '1h before',
+    priorityLevel: 'Normal',
     queueGenerated: true,
   },
   {
@@ -115,6 +117,7 @@ const initialAppointments = [
     appointmentType: 'Priority',
     status: 'Scheduled',
     reminderSchedule: 'Same-day confirmation',
+    priorityLevel: 'VIP',
     queueGenerated: false,
   },
 ]
@@ -264,6 +267,7 @@ function App() {
       appointmentType: 'In-person',
       status: 'Scheduled',
       reminderSchedule: '2h before',
+      priorityLevel: 'Normal',
       queueGenerated: false,
     }
 
@@ -724,6 +728,10 @@ function App() {
                   <span>Type</span>
                   <strong>{selectedAppointment.appointmentType}</strong>
                 </div>
+                <div className="focus-pill">
+                  <span>Priority</span>
+                  <strong>{selectedAppointment.priorityLevel}</strong>
+                </div>
               </div>
 
               <div className="field-grid">
@@ -785,6 +793,19 @@ function App() {
                     value={selectedAppointment.timeSlot}
                     onChange={(event) => updateSelectedAppointment('timeSlot', event.target.value)}
                   />
+                </label>
+                <label>
+                  Priority Level
+                  <select
+                    value={selectedAppointment.priorityLevel}
+                    onChange={(event) =>
+                      updateSelectedAppointment('priorityLevel', event.target.value)
+                    }
+                  >
+                    <option>Normal</option>
+                    <option>High</option>
+                    <option>VIP</option>
+                  </select>
                 </label>
                 <label>
                   Status
