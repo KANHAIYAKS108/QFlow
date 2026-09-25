@@ -370,6 +370,20 @@ const reportHighlights = [
   { label: 'Audit status', value: 'Clean', tone: 'blue' },
 ]
 
+const complianceCards = [
+  { label: 'Audit coverage', value: '98.6%', tone: 'green' },
+  { label: 'Policy exceptions', value: '03', tone: 'amber' },
+  { label: 'Risk score', value: 'Low', tone: 'blue' },
+  { label: 'Last review', value: 'Today 08:00', tone: 'purple' },
+]
+
+const auditEvents = [
+  { title: 'Customer file verification', detail: 'Neha Kapoor • KYC check approved', time: '09:40 AM', level: 'Passed' },
+  { title: 'Queue escalation notice', detail: 'Delhi Central • 2 tickets exceeded SLA', time: '10:15 AM', level: 'Alert' },
+  { title: 'Counter reassignment', detail: 'Counter 04 • Staff moved to priority lane', time: '11:20 AM', level: 'Updated' },
+  { title: 'No-show exception', detail: 'Rahul Mehta • digital follow-up scheduled', time: '12:05 PM', level: 'Review' },
+]
+
 function App() {
   const [staff, setStaff] = useState(initialStaff)
   const [counters, setCounters] = useState(initialCounters)
@@ -2077,6 +2091,64 @@ function App() {
                     <strong>{item.value}</strong>
                   </div>
                 ))}
+              </div>
+            </div>
+          </div>
+        </section>
+
+        <section className="compliance-panel panel">
+          <div className="panel-header">
+            <div>
+              <p className="eyebrow">Master form 11</p>
+              <h3>Compliance &amp; Audit Trail</h3>
+            </div>
+            <span className="tag success">Policy synced</span>
+          </div>
+
+          <div className="report-metrics">
+            {complianceCards.map((item) => (
+              <article key={item.label} className={`summary-card ${item.tone}`}>
+                <span>{item.label}</span>
+                <strong>{item.value}</strong>
+              </article>
+            ))}
+          </div>
+
+          <div className="audit-layout">
+            <div className="panel audit-log-panel">
+              <div className="panel-header compact-header">
+                <h3>Recent activities</h3>
+              </div>
+              <div className="audit-list">
+                {auditEvents.map((event) => (
+                  <div key={`${event.title}-${event.time}`} className="audit-item">
+                    <div className="audit-main">
+                      <strong>{event.title}</strong>
+                      <small>{event.detail}</small>
+                    </div>
+                    <div className="audit-meta">
+                      <span className={`audit-level ${event.level.toLowerCase()}`}>{event.level}</span>
+                      <time>{event.time}</time>
+                    </div>
+                  </div>
+                ))}
+              </div>
+            </div>
+
+            <div className="panel audit-detail-panel">
+              <div className="panel-header compact-header">
+                <h3>Control checklist</h3>
+              </div>
+              <div className="checklist">
+                <label className="check-item"><input type="checkbox" defaultChecked /> <span>Daily branch SOP pass</span></label>
+                <label className="check-item"><input type="checkbox" defaultChecked /> <span>Customer ID verification complete</span></label>
+                <label className="check-item"><input type="checkbox" defaultChecked /> <span>Service queue SLA monitored</span></label>
+                <label className="check-item"><input type="checkbox" /> <span>Supervisor sign-off pending</span></label>
+                <label className="check-item"><input type="checkbox" /> <span>Escalation documentation uploaded</span></label>
+              </div>
+              <div className="audit-actions">
+                <button type="button" className="secondary-btn small-btn">Review logs</button>
+                <button type="button" className="primary-btn small-btn">Approve checklist</button>
               </div>
             </div>
           </div>
