@@ -436,6 +436,14 @@ function App() {
     setSelectedTicketId(newTicket.id)
   }
 
+  const queueTimeline = [
+    { label: 'Created', value: selectedTicket.createdAt },
+    { label: 'Check-in', value: selectedTicket.checkInAt },
+    { label: 'Called', value: selectedTicket.calledAt },
+    { label: 'Service start', value: selectedTicket.serviceStartedAt },
+    { label: 'Completed', value: selectedTicket.serviceCompletedAt },
+  ].filter((step) => step.value)
+
   const autoAssignTicket = () => {
     const bestMatch = counters.find(
       (counter) =>
@@ -1174,6 +1182,27 @@ function App() {
                 <div className="focus-pill">
                   <span>Priority</span>
                   <strong>{selectedTicket.priority}</strong>
+                </div>
+              </div>
+
+              <div className="timeline-panel">
+                <div className="panel-header compact-header">
+                  <h3>Queue timeline</h3>
+                </div>
+                <div className="timeline-list">
+                  {queueTimeline.length > 0 ? (
+                    queueTimeline.map((step) => (
+                      <div key={step.label} className="timeline-item">
+                        <span className="timeline-dot" />
+                        <div>
+                          <strong>{step.label}</strong>
+                          <small>{step.value}</small>
+                        </div>
+                      </div>
+                    ))
+                  ) : (
+                    <p className="empty-copy">No activity recorded yet.</p>
+                  )}
                 </div>
               </div>
 

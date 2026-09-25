@@ -824,6 +824,64 @@ textarea:focus {
   color: #0f172a;
 }
 
+.timeline-panel {
+  background: #f8fafc;
+  border: 1px solid #e2e8f0;
+  border-radius: 16px;
+  padding: 16px;
+  margin-bottom: 18px;
+}
+
+.compact-header {
+  margin-bottom: 12px;
+}
+
+.timeline-list {
+  display: flex;
+  flex-direction: column;
+  gap: 10px;
+}
+
+.timeline-item {
+  display: flex;
+  align-items: center;
+  gap: 10px;
+  padding: 8px 0;
+  border-bottom: 1px solid #e2e8f0;
+}
+
+.timeline-item:last-child {
+  border-bottom: none;
+}
+
+.timeline-dot {
+  width: 10px;
+  height: 10px;
+  border-radius: 999px;
+  background: linear-gradient(135deg, #3b82f6, #14b8a6);
+  box-shadow: 0 0 0 4px rgba(59, 130, 246, 0.12);
+}
+
+.timeline-item div {
+  display: flex;
+  flex-direction: column;
+  gap: 4px;
+}
+
+.timeline-item strong {
+  font-size: 0.78rem;
+  color: #0f172a;
+}
+
+.timeline-item small {
+  color: #475569;
+}
+
+.empty-copy {
+  color: #64748b;
+  margin: 0;
+}
+
 .small-btn {
   padding: 10px 14px;
 }
