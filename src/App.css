@@ -1257,12 +1257,23 @@ textarea:focus {
 
   .stats-grid,
   .signal-grid,
+  .health-grid,
+  .live-queue-stats,
   .staff-layout,
   .appointment-layout,
   .field-grid,
   .counter-grid,
   .staff-focus,
-  .appointment-focus {
+  .appointment-focus,
+  .control-grid {
+    grid-template-columns: 1fr;
+  }
+
+  .queue-item {
+    grid-template-columns: 1fr 1fr;
+  }
+
+  .action-grid {
     grid-template-columns: 1fr;
   }
 
