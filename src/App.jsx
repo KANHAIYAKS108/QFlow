@@ -244,6 +244,13 @@ const queueSignals = [
   { label: 'No-shows', value: '1', tone: 'red' },
 ]
 
+const liveQueueStats = [
+  { label: 'Waiting', value: '27', tone: 'amber' },
+  { label: 'Serving', value: '4', tone: 'green' },
+  { label: 'Avg wait', value: '16 min', tone: 'blue' },
+  { label: 'Alerts', value: '3', tone: 'red' },
+]
+
 function App() {
   const [staff, setStaff] = useState(initialStaff)
   const [counters, setCounters] = useState(initialCounters)
@@ -255,6 +262,9 @@ function App() {
   const [staffFilter, setStaffFilter] = useState('All')
   const [appointmentFilter, setAppointmentFilter] = useState('All')
   const [ticketFilter, setTicketFilter] = useState('All')
+  const [queueEvents, setQueueEvents] = useState([
+    { id: 1, action: 'System', detail: 'Control room initialized', time: '09:45 AM' },
+  ])
 
   const filteredStaff = useMemo(
     () =>
@@ -399,6 +409,19 @@ function App() {
   const selectedTicket = useMemo(
     () => tickets.find((ticket) => ticket.id === selectedTicketId) ?? tickets[0],
     [selectedTicketId, tickets],
+  )
+
+  const liveQueueList = useMemo(
+    () => [...tickets].sort((first, second) => first.queuePosition - second.queuePosition),
+    [tickets],
+  )
+
+  const nextCustomer = useMemo(
+    () =>
+      liveQueueList.find(
+        (ticket) => !['Completed', 'Cancelled', 'No-Show', 'Skipped'].includes(ticket.status),
+      ) ?? selectedTicket,
+    [liveQueueList, selectedTicket],
   )
 
   const updateSelectedTicket = (field, value) => {
@@ -1469,6 +1492,79 @@ function App() {
                     Advance status
                   </button>
                 </div>
+              </div>
+            </div>
+          </div>
+        </section>
+
+        <section className="control-center panel">
+          <div className="panel-header">
+            <div>
+              <p className="eyebrow">Master form 6</p>
+              <h3>Live Queue Control Center</h3>
+            </div>
+            <span className="tag success">Operations live</span>
+          </div>
+
+          <div className="live-queue-stats">
+            {liveQueueStats.map((stat) => (
+              <div key={stat.label} className={`live-stat ${stat.tone}`}>
+                <span>{stat.label}</span>
+                <strong>{stat.value}</strong>
+              </div>
+            ))}
+          </div>
+
+          <div className="control-grid">
+            <div className="panel control-list-panel">
+              <div className="panel-header compact-header">
+                <h3>Queue</h3>
+              </div>
+
+              <div className="queue-list">
+                {liveQueueList.map((ticket) => (
+                  <button
+                    key={ticket.id}
+                    type="button"
+                    className={`queue-item ${ticket.id === selectedTicket?.id ? 'selected' : ''}`}
+                    onClick={() => setSelectedTicketId(ticket.id)}
+                  >
+                    <span className="queue-code">#{ticket.ticketNumber}</span>
+                    <strong>{ticket.service}</strong>
+                    <span className={`queue-status ${ticket.status.toLowerCase().replace(/\s+/g, '-')}`}>
+                      {ticket.status}
+                    </span>
+                    <small>{ticket.estimatedWait}</small>
+                  </button>
+                ))}
+              </div>
+            </div>
+
+            <div className="panel control-next-panel">
+              <div className="panel-header compact-header">
+                <h3>Next customer</h3>
+              </div>
+
+              <div className="next-ticket">
+                <span className="queue-code">{nextCustomer.ticketId}</span>
+                <strong>{nextCustomer.service}</strong>
+                <small>{nextCustomer.customerId}</small>
+              </div>
+            </div>
+
+            <div className="panel control-events-panel">
+              <div className="panel-header compact-header">
+                <h3>Events</h3>
+              </div>
+
+              <div className="event-list">
+                {queueEvents.map((event) => (
+                  <div key={event.id} className="event-item">
+                    <strong>{event.action}</strong>
+                    <span>{event.detail}</span>
+                    <small>{event.time}</small>
+                  </div>
+                ))}
               </div>
             </div>
           </div>

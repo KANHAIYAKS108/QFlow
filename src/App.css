@@ -1003,6 +1003,157 @@ textarea:focus {
   margin-top: 22px;
 }
 
+.control-center {
+  margin-top: 22px;
+}
+
+.live-queue-stats {
+  display: grid;
+  grid-template-columns: repeat(4, minmax(0, 1fr));
+  gap: 14px;
+  margin: 18px 0;
+}
+
+.live-stat {
+  background: white;
+  border: 1px solid #e2e8f0;
+  border-radius: 16px;
+  padding: 14px 16px;
+  display: flex;
+  flex-direction: column;
+  gap: 8px;
+}
+
+.live-stat span {
+  color: #475569;
+  font-size: 0.75rem;
+  letter-spacing: 0.06em;
+  text-transform: uppercase;
+}
+
+.live-stat strong {
+  font-size: 1.45rem;
+  color: #0f172a;
+}
+
+.live-stat.amber strong { color: #d97706; }
+.live-stat.green strong { color: #10b981; }
+.live-stat.blue strong { color: #2563eb; }
+.live-stat.red strong { color: #dc2626; }
+
+.control-grid {
+  display: grid;
+  grid-template-columns: 1.2fr 0.8fr 0.8fr;
+  gap: 18px;
+}
+
+.queue-list {
+  display: flex;
+  flex-direction: column;
+  gap: 10px;
+}
+
+.queue-item {
+  width: 100%;
+  background: #f8fafc;
+  border: 1px solid #e2e8f0;
+  border-radius: 14px;
+  padding: 12px 14px;
+  display: grid;
+  grid-template-columns: 1fr 1.5fr auto auto;
+  gap: 8px;
+  align-items: center;
+  text-align: left;
+  color: #0f172a;
+}
+
+.queue-item.selected {
+  border-color: rgba(59, 130, 246, 0.45);
+  background: rgba(59, 130, 246, 0.06);
+}
+
+.queue-code {
+  font-weight: 700;
+  color: #1d4ed8;
+}
+
+.queue-status {
+  display: inline-flex;
+  justify-content: center;
+  padding: 4px 8px;
+  border-radius: 999px;
+  font-size: 0.62rem;
+  text-transform: uppercase;
+  letter-spacing: 0.05em;
+  font-weight: 700;
+}
+
+.queue-status.waiting,
+.queue-status.notified {
+  background: #fef3c7;
+  color: #92400e;
+}
+
+.queue-status.called,
+.queue-status.serving,
+.queue-status.completed {
+  background: #dcfce7;
+  color: #166534;
+}
+
+.queue-status.skipped,
+.queue-status.cancelled,
+.queue-status.no-show,
+.queue-status.transferred {
+  background: #fee2e2;
+  color: #b91c1c;
+}
+
+.next-ticket {
+  display: flex;
+  flex-direction: column;
+  gap: 10px;
+  padding: 16px;
+  background: linear-gradient(135deg, rgba(14, 165, 233, 0.08), rgba(59, 130, 246, 0.12));
+  border: 1px solid rgba(59, 130, 246, 0.2);
+  border-radius: 18px;
+}
+
+.next-ticket strong {
+  font-size: 1.3rem;
+  color: #0f172a;
+}
+
+.next-ticket small {
+  color: #475569;
+}
+
+.event-list {
+  display: flex;
+  flex-direction: column;
+  gap: 10px;
+}
+
+.event-item {
+  border-left: 3px solid #3b82f6;
+  background: #f8fafc;
+  border-radius: 10px;
+  padding: 10px 12px;
+  display: flex;
+  flex-direction: column;
+  gap: 4px;
+}
+
+.event-item strong {
+  font-size: 0.8rem;
+  color: #0f172a;
+}
+
+.event-item span,
+.event-item small {
+  color: #475569;
+}
+
 .ticket-panel .appointment-status.waiting {
   background: #fef3c7;
   color: #92400e;
