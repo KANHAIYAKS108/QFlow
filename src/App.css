@@ -1416,6 +1416,43 @@ textarea:focus {
   font-weight: 600;
 }
 
+.preview-panel {
+  margin-top: 18px;
+}
+
+.notification-preview {
+  background: linear-gradient(180deg, #f8fbff 0%, #eef8ff 100%);
+  border: 1px solid #dbeafe;
+  border-radius: 18px;
+  padding: 18px;
+}
+
+.preview-header {
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  gap: 8px;
+  margin-bottom: 10px;
+  flex-wrap: wrap;
+}
+
+.preview-badge {
+  background: #dbeafe;
+  border-radius: 999px;
+  padding: 6px 10px;
+  color: #1d4ed8;
+  font-size: 0.7rem;
+  font-weight: 700;
+  text-transform: uppercase;
+}
+
+.notification-preview p {
+  margin: 0;
+  white-space: pre-line;
+  color: #0f172a;
+  line-height: 1.6;
+}
+
 .ticket-panel .appointment-status.waiting {
   background: #fef3c7;
   color: #92400e;

@@ -450,6 +450,18 @@ function App() {
     [liveQueueList, selectedTicket],
   )
 
+  const notificationPreview = useMemo(
+    () => ({
+      title: selectedNotificationEvent,
+      body:
+        selectedNotificationEvent === 'POSITION_CHANGED'
+          ? 'You are #3 in the queue.\n\nEstimated wait:\n7–11 minutes.\n\nPlease return to the branch\nbefore approximately 12:18 PM.'
+          : 'Customer status updated and automation rules have been triggered.',
+      channels: selectedChannels.join(', '),
+    }),
+    [selectedChannels, selectedNotificationEvent],
+  )
+
   useEffect(() => {
     const interval = setInterval(() => {
       setCustomerPosition((current) => (current > 1 ? current - 1 : 1))
@@ -1823,6 +1835,19 @@ function App() {
                 <span>Retry logic</span>
                 <span>Escalate delay</span>
               </div>
+            </div>
+          </div>
+
+          <div className="preview-panel panel">
+            <div className="panel-header compact-header">
+              <h3>Live notification preview</h3>
+            </div>
+            <div className="notification-preview">
+              <div className="preview-header">
+                <span className="preview-badge">{notificationPreview.title}</span>
+                <span>{notificationPreview.channels}</span>
+              </div>
+              <p>{notificationPreview.body}</p>
             </div>
           </div>
         </section>
