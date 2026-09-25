@@ -424,6 +424,65 @@ function App() {
     [liveQueueList, selectedTicket],
   )
 
+  const logQueueEvent = (action, ticket = selectedTicket) => {
+    setQueueEvents((previous) => [
+      {
+        id: Date.now(),
+        action,
+        detail: `${ticket.ticketId} • ${ticket.service}`,
+        time: new Date().toLocaleTimeString([], { hour: '2-digit', minute: '2-digit' }),
+      },
+      ...previous,
+    ].slice(0, 6))
+  }
+
+  const handleQueueAction = (action, ticket = selectedTicket) => {
+    if (!ticket) return
+
+    const timestamp = new Date().toLocaleTimeString([], { hour: '2-digit', minute: '2-digit' })
+    const statusMap = {
+      CALL: 'Called',
+      RECALL: 'Notified',
+      SKIP: 'Skipped',
+      RESTORE: 'Waiting',
+      TRANSFER: 'Transferred',
+      'START SERVICE': 'Serving',
+      COMPLETE: 'Completed',
+      'NO SHOW': 'No-Show',
+      CANCEL: 'Cancelled',
+    }
+
+    const nextStatus = statusMap[action]
+
+    setTickets((previous) =>
+      previous.map((item) =>
+        item.id === ticket.id
+          ? {
+              ...item,
+              status: nextStatus ?? item.status,
+              calledAt: action === 'CALL' ? timestamp : item.calledAt,
+              serviceStartedAt: action === 'START SERVICE' ? timestamp : item.serviceStartedAt,
+              serviceCompletedAt: action === 'COMPLETE' ? timestamp : item.serviceCompletedAt,
+            }
+          : item,
+      ),
+    )
+
+    logQueueEvent(action, ticket)
+  }
+
+  const handleCallNext = () => {
+    const targetTicket =
+      liveQueueList.find(
+        (ticket) => !['Completed', 'Cancelled', 'No-Show', 'Skipped'].includes(ticket.status),
+      ) ?? selectedTicket
+
+    if (!targetTicket) return
+
+    setSelectedTicketId(targetTicket.id)
+    handleQueueAction('CALL', targetTicket)
+  }
+
   const updateSelectedTicket = (field, value) => {
     setTickets((previous) =>
       previous.map((ticket) =>
@@ -1549,6 +1608,39 @@ function App() {
                 <span className="queue-code">{nextCustomer.ticketId}</span>
                 <strong>{nextCustomer.service}</strong>
                 <small>{nextCustomer.customerId}</small>
+              </div>
+
+              <div className="action-grid">
+                <button type="button" className="primary-btn small-btn" onClick={handleCallNext}>
+                  CALL NEXT
+                </button>
+                <button type="button" className="secondary-btn small-btn" onClick={() => handleQueueAction('CALL')}>
+                  CALL
+                </button>
+                <button type="button" className="secondary-btn small-btn" onClick={() => handleQueueAction('RECALL')}>
+                  RECALL
+                </button>
+                <button type="button" className="secondary-btn small-btn" onClick={() => handleQueueAction('SKIP')}>
+                  SKIP
+                </button>
+                <button type="button" className="secondary-btn small-btn" onClick={() => handleQueueAction('RESTORE')}>
+                  RESTORE
+                </button>
+                <button type="button" className="secondary-btn small-btn" onClick={() => handleQueueAction('TRANSFER')}>
+                  TRANSFER
+                </button>
+                <button type="button" className="primary-btn small-btn" onClick={() => handleQueueAction('START SERVICE')}>
+                  START SERVICE
+                </button>
+                <button type="button" className="primary-btn small-btn" onClick={() => handleQueueAction('COMPLETE')}>
+                  COMPLETE
+                </button>
+                <button type="button" className="secondary-btn small-btn" onClick={() => handleQueueAction('NO SHOW')}>
+                  NO SHOW
+                </button>
+                <button type="button" className="secondary-btn small-btn" onClick={() => handleQueueAction('CANCEL')}>
+                  CANCEL
+                </button>
               </div>
             </div>
 

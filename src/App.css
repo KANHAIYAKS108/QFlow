@@ -1128,6 +1128,18 @@ textarea:focus {
   color: #475569;
 }
 
+.action-grid {
+  display: grid;
+  grid-template-columns: repeat(2, minmax(0, 1fr));
+  gap: 10px;
+  margin-top: 16px;
+}
+
+.action-grid button {
+  width: 100%;
+  justify-content: center;
+}
+
 .event-list {
   display: flex;
   flex-direction: column;
