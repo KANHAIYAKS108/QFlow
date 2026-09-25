@@ -1,4 +1,5 @@
 import { useEffect, useMemo, useState } from 'react'
+import { buildRoutingGuidance } from './queueRouting.js'
 import './App.css'
 
 const branchOptions = ['Noida Sector 18', 'Greater Noida', 'Delhi Central']
@@ -614,6 +615,11 @@ function App() {
 
     return () => clearInterval(interval)
   }, [])
+
+  const routingAdvice = useMemo(
+    () => buildRoutingGuidance({ tickets, counters, staff }),
+    [tickets, counters, staff],
+  )
 
   const queueHealthCards = useMemo(
     () => [
@@ -1824,6 +1830,12 @@ function App() {
               <div key={card.label} className={`health-card ${card.tone}`}>
                 <span>{card.label}</span>
                 <strong>{card.value}</strong>
+              </div>
+            ))}
+            {routingAdvice.slice(0, 3).map((card) => (
+              <div key={`${card.service}-routing`} className="health-card amber">
+                <span>{card.service} coverage</span>
+                <strong>{card.recommendedAgents} staff recommended</strong>
               </div>
             ))}
           </div>
