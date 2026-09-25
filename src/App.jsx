@@ -474,6 +474,13 @@ function App() {
     },
   ]
 
+  const queueBoard = [
+    { label: 'Queue health', value: selectedTicket.status === 'Completed' ? 'Excellent' : 'Stable', tone: 'green' },
+    { label: 'Service mix', value: selectedTicket.service, tone: 'blue' },
+    { label: 'Assigned lane', value: selectedTicket.assignedCounter || 'Pending', tone: 'purple' },
+    { label: 'Priority tier', value: selectedTicket.priority, tone: 'amber' },
+  ]
+
   const autoAssignTicket = () => {
     const bestMatch = counters.find(
       (counter) =>
@@ -1248,6 +1255,15 @@ function App() {
               <div className="alert-grid">
                 {queueAlerts.map((item) => (
                   <div key={item.label} className={`alert-card ${item.tone}`}>
+                    <span>{item.label}</span>
+                    <strong>{item.value}</strong>
+                  </div>
+                ))}
+              </div>
+
+              <div className="board-grid">
+                {queueBoard.map((item) => (
+                  <div key={item.label} className={`board-card ${item.tone}`}>
                     <span>{item.label}</span>
                     <strong>{item.value}</strong>
                   </div>
