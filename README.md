@@ -1,16 +1,61 @@
-# React + Vite
+# QFlow Product Master Specification
 
-This template provides a minimal setup to get React working in Vite with HMR and some Oxlint rules.
+QFlow is a multi-tenant queue and appointment management platform for service businesses, healthcare, banking, government offices, and other high-traffic environments.
 
-Currently, two official plugins are available:
+## Product vision
 
-- [@vitejs/plugin-react](https://github.com/vitejs/vite-plugin-react/blob/main/packages/plugin-react) uses [Oxc](https://oxc.rs)
-- [@vitejs/plugin-react-swc](https://github.com/vitejs/vite-plugin-react/blob/main/packages/plugin-react-swc) uses [SWC](https://swc.rs/)
+The product should feel like a modern SaaS platform, not a college CRUD dashboard. The operational backbone is a unified queue system centered on tickets, appointments, staff actions, web notifications, and real-time customer journey updates.
 
-## React Compiler
+## Core architecture
 
-The React Compiler is not enabled on this template because of its impact on dev & build performances. To add it, see [this documentation](https://react.dev/learn/react-compiler/installation).
+- Organization → Location → Service → Staff/Counter
+- Appointment engine → Queue engine → Ticket lifecycle
+- Live queue state → Notification engine → Customer UI
+- Analytics and audit trail layered on top
 
-## Expanding the Oxlint configuration
+## Master form sequence
 
-If you are developing a production application, we recommend using TypeScript with type-aware lint rules enabled. Check out the [TS template](https://github.com/vitejs/vite/tree/main/packages/create-vite/template-react-ts) for information on how to integrate TypeScript and Oxlint's TypeScript related rules in your project.
+1. Organization & Location Master
+2. Service Master
+3. Staff & Counter Master
+4. Appointment Master
+5. Queue / Ticket Master
+6. Live Queue Control Center
+7. Customer Live Journey
+8. Notification & Automation Master
+9. Analytics & Intelligence
+10. Queue Rules & Configuration Master
+
+## Documentation set
+
+- [docs/01-foundation.md](docs/01-foundation.md)
+- [docs/02-identity-and-organization.md](docs/02-identity-and-organization.md)
+- [docs/03-services-and-appointments.md](docs/03-services-and-appointments.md)
+- [docs/04-queue-engine-and-events.md](docs/04-queue-engine-and-events.md)
+- [docs/05-real-time-and-architecture.md](docs/05-real-time-and-architecture.md)
+- [docs/06-deployment-and-roadmap.md](docs/06-deployment-and-roadmap.md)
+
+## Current implementation direction
+
+- Frontend: Next.js + React + TypeScript + Tailwind
+- Backend: Spring Boot + Java + Spring Security + JPA
+- Database: MySQL
+- Real-time layer: Redis + WebSocket/STOMP
+- Event layer: Redis Streams first, Kafka later when justified
+- Deployment: Docker, Docker Compose, Nginx
+
+## MVP focus
+
+The first serious product build should cover:
+
+- authentication and roles
+- organization and location structures
+- services and operating hours
+- staff and counters
+- appointment booking and check-in
+- queue creation and ticket lifecycle
+- live queue updates
+- notification engine
+- analytics and audit trails
+
+This is the product foundation to build against before adding premium AI or forecasting features.
