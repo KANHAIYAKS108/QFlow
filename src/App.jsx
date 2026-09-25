@@ -390,6 +390,26 @@ const complianceRecommendations = [
   { label: 'Policy drift', value: '0.4%', tone: 'blue' },
 ]
 
+const queueRuleDefaults = [
+  { name: 'FIFO', enabled: true, description: 'Default fairness ordering by check-in sequence.' },
+  { name: 'Priority', enabled: true, description: 'High-risk queues can move ahead of standard waits.' },
+  { name: 'Appointment Priority', enabled: true, description: 'Booked customers keep preference if they arrive on time.' },
+  { name: 'Emergency Priority', enabled: true, description: 'Emergency cases can override queue order when approved.' },
+  { name: 'VIP', enabled: true, description: 'VIP handling is capped to avoid skipping all customers.' },
+  { name: 'Service-specific priority', enabled: false, description: 'Optional override for certain special service lanes.' },
+]
+
+const policyChecks = [
+  { label: 'Maximum Queue Size', value: '180', tone: 'blue' },
+  { label: 'Late Arrival Grace Period', value: '10 min', tone: 'green' },
+  { label: 'Skip Policy', value: '2 per hour', tone: 'amber' },
+  { label: 'Recall Policy', value: 'Auto recall on wait > 20 min', tone: 'purple' },
+  { label: 'Auto-expire', value: '30 min', tone: 'red' },
+  { label: 'Notification Threshold', value: '5 min', tone: 'blue' },
+  { label: 'Counter Assignment Rule', value: 'Skill + nearest available', tone: 'green' },
+  { label: 'Estimated Wait Algorithm', value: 'Live queue + service time', tone: 'purple' },
+]
+
 function App() {
   const [staff, setStaff] = useState(initialStaff)
   const [counters, setCounters] = useState(initialCounters)
@@ -2166,6 +2186,56 @@ function App() {
                 ))}
               </div>
             </div>
+          </div>
+        </section>
+
+        <section className="rules-panel panel">
+          <div className="panel-header">
+            <div>
+              <p className="eyebrow">Master form 10</p>
+              <h3>Queue Rules &amp; Configuration Master</h3>
+            </div>
+            <span className="tag success">Policy engine active</span>
+          </div>
+
+          <div className="rules-intro">
+            <div className="rule-highlight">
+              <span>Priority logic</span>
+              <strong>Appointment customer + arrived within 10 min grace period → Priority = Appointment</strong>
+            </div>
+            <div className="rule-highlight neutral">
+              <span>Guardrail</span>
+              <strong>VIP does not automatically jump everyone; branch policy controls the override.</strong>
+            </div>
+          </div>
+
+          <div className="rules-grid">
+            {policyChecks.map((item) => (
+              <div key={item.label} className={`board-card ${item.tone}`}>
+                <span>{item.label}</span>
+                <strong>{item.value}</strong>
+              </div>
+            ))}
+          </div>
+
+          <div className="rule-table">
+            <div className="rule-header-row">
+              <span>Queue rule</span>
+              <span>Status</span>
+              <span>Policy note</span>
+            </div>
+            {queueRuleDefaults.map((rule) => (
+              <div key={rule.name} className="rule-row">
+                <div className="rule-name">
+                  <strong>{rule.name}</strong>
+                </div>
+                <label className="toggle-row">
+                  <input type="checkbox" defaultChecked={rule.enabled} />
+                  <span>{rule.enabled ? 'Enabled' : 'Disabled'}</span>
+                </label>
+                <small>{rule.description}</small>
+              </div>
+            ))}
           </div>
         </section>
 
