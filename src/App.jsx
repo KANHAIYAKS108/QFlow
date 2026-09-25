@@ -1850,6 +1850,30 @@ function App() {
               <p>{notificationPreview.body}</p>
             </div>
           </div>
+
+          <div className="summary-panel panel">
+            <div className="panel-header compact-header">
+              <h3>Automation summary</h3>
+            </div>
+            <div className="summary-grid">
+              <div className="summary-card">
+                <span>Delivery</span>
+                <strong>Multi-channel</strong>
+              </div>
+              <div className="summary-card">
+                <span>Trigger</span>
+                <strong>{selectedNotificationEvent}</strong>
+              </div>
+              <div className="summary-card">
+                <span>Retry</span>
+                <strong>3 attempts</strong>
+              </div>
+              <div className="summary-card">
+                <span>Timing</span>
+                <strong>Instant + 5 min</strong>
+              </div>
+            </div>
+          </div>
         </section>
       </main>
     </div>
