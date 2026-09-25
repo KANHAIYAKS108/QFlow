@@ -237,6 +237,13 @@ const queueSummary = [
   { label: 'Serving', value: '18', change: 'currently active', tone: 'purple' },
 ]
 
+const queueSignals = [
+  { label: 'Priority queue', value: '8', tone: 'amber' },
+  { label: 'Delayed', value: '4', tone: 'purple' },
+  { label: 'Transferred', value: '2', tone: 'blue' },
+  { label: 'No-shows', value: '1', tone: 'red' },
+]
+
 function App() {
   const [staff, setStaff] = useState(initialStaff)
   const [counters, setCounters] = useState(initialCounters)
@@ -427,6 +434,18 @@ function App() {
 
     setTickets((previous) => [newTicket, ...previous])
     setSelectedTicketId(newTicket.id)
+  }
+
+  const advanceTicketStatus = () => {
+    const cycle = queueStatusOptions
+    const currentIndex = cycle.indexOf(selectedTicket.status)
+    const nextStatus = cycle[(currentIndex + 1) % cycle.length]
+
+    setTickets((previous) =>
+      previous.map((ticket) =>
+        ticket.id === selectedTicketId ? { ...ticket, status: nextStatus } : ticket,
+      ),
+    )
   }
 
   return (
@@ -1044,6 +1063,15 @@ function App() {
             ))}
           </div>
 
+          <div className="signal-grid">
+            {queueSignals.map((signal) => (
+              <div key={signal.label} className={`signal-card ${signal.tone}`}>
+                <span>{signal.label}</span>
+                <strong>{signal.value}</strong>
+              </div>
+            ))}
+          </div>
+
           <div className="appointment-layout">
             <div className="panel appointment-list-panel">
               <div className="catalog-actions">
@@ -1281,6 +1309,18 @@ function App() {
                     }
                   />
                 </label>
+              </div>
+
+              <div className="queue-box">
+                <div>
+                  <span className="queue-title">Ticket progression</span>
+                  <strong>
+                    {selectedTicket.status} • Queue position {selectedTicket.queuePosition}
+                  </strong>
+                </div>
+                <button type="button" className="primary-btn small-btn" onClick={advanceTicketStatus}>
+                  Advance status
+                </button>
               </div>
             </div>
           </div>

@@ -618,6 +618,40 @@ textarea:focus {
   margin-bottom: 20px;
 }
 
+.signal-grid {
+  display: grid;
+  grid-template-columns: repeat(4, minmax(0, 1fr));
+  gap: 14px;
+  margin: 0 0 20px;
+}
+
+.signal-card {
+  background: white;
+  border: 1px solid #e2e8f0;
+  border-radius: 16px;
+  padding: 14px 16px;
+  display: flex;
+  flex-direction: column;
+  gap: 6px;
+}
+
+.signal-card span {
+  color: #475569;
+  font-size: 0.76rem;
+  text-transform: uppercase;
+  letter-spacing: 0.06em;
+}
+
+.signal-card strong {
+  color: #0f172a;
+  font-size: 1.5rem;
+}
+
+.signal-card.amber strong { color: #d97706; }
+.signal-card.purple strong { color: #7c3aed; }
+.signal-card.blue strong { color: #2563eb; }
+.signal-card.red strong { color: #dc2626; }
+
 .summary-card {
   background: white;
   border: 1px solid #e2e8f0;
@@ -830,6 +864,7 @@ textarea:focus {
   }
 
   .stats-grid,
+  .signal-grid,
   .staff-layout,
   .appointment-layout,
   .field-grid,
