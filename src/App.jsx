@@ -424,6 +424,16 @@ function App() {
     [liveQueueList, selectedTicket],
   )
 
+  const queueHealthCards = useMemo(
+    () => [
+      { label: 'Next in line', value: nextCustomer.ticketId, tone: 'blue' },
+      { label: 'Service lane', value: nextCustomer.service, tone: 'green' },
+      { label: 'Priority', value: nextCustomer.priority, tone: 'amber' },
+      { label: 'Assigned lane', value: nextCustomer.assignedCounter, tone: 'purple' },
+    ],
+    [nextCustomer],
+  )
+
   const logQueueEvent = (action, ticket = selectedTicket) => {
     setQueueEvents((previous) => [
       {
@@ -1570,6 +1580,15 @@ function App() {
               <div key={stat.label} className={`live-stat ${stat.tone}`}>
                 <span>{stat.label}</span>
                 <strong>{stat.value}</strong>
+              </div>
+            ))}
+          </div>
+
+          <div className="health-grid">
+            {queueHealthCards.map((card) => (
+              <div key={card.label} className={`health-card ${card.tone}`}>
+                <span>{card.label}</span>
+                <strong>{card.value}</strong>
               </div>
             ))}
           </div>

@@ -1128,6 +1128,40 @@ textarea:focus {
   color: #475569;
 }
 
+.health-grid {
+  display: grid;
+  grid-template-columns: repeat(4, minmax(0, 1fr));
+  gap: 12px;
+  margin: 18px 0;
+}
+
+.health-card {
+  border-radius: 14px;
+  border: 1px solid #e2e8f0;
+  background: white;
+  padding: 12px 14px;
+  display: flex;
+  flex-direction: column;
+  gap: 6px;
+}
+
+.health-card span {
+  color: #475569;
+  font-size: 0.7rem;
+  text-transform: uppercase;
+  letter-spacing: 0.06em;
+}
+
+.health-card strong {
+  color: #0f172a;
+  font-size: 1.05rem;
+}
+
+.health-card.blue { background: rgba(59, 130, 246, 0.08); border-color: rgba(59, 130, 246, 0.2); }
+.health-card.green { background: rgba(16, 185, 129, 0.08); border-color: rgba(16, 185, 129, 0.2); }
+.health-card.amber { background: rgba(245, 158, 11, 0.08); border-color: rgba(245, 158, 11, 0.2); }
+.health-card.purple { background: rgba(168, 85, 247, 0.08); border-color: rgba(168, 85, 247, 0.2); }
+
 .action-grid {
   display: grid;
   grid-template-columns: repeat(2, minmax(0, 1fr));
