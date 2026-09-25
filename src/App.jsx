@@ -91,6 +91,7 @@ const initialAppointments = [
     appointmentType: 'In-person',
     status: 'Confirmed',
     reminderSchedule: '24h before + 2h before',
+    queueGenerated: true,
   },
   {
     id: 2,
@@ -102,6 +103,7 @@ const initialAppointments = [
     appointmentType: 'Virtual',
     status: 'Checked-In',
     reminderSchedule: '1h before',
+    queueGenerated: true,
   },
   {
     id: 3,
@@ -113,6 +115,7 @@ const initialAppointments = [
     appointmentType: 'Priority',
     status: 'Scheduled',
     reminderSchedule: 'Same-day confirmation',
+    queueGenerated: false,
   },
 ]
 
@@ -131,6 +134,13 @@ const overviewStats = [
   { label: 'Active counters', value: '11', change: '4 under watch', tone: 'green' },
   { label: 'Queue balance', value: '1.2:1', change: 'Stable load', tone: 'amber' },
   { label: 'Coverage rate', value: '96%', change: 'High routing fit', tone: 'purple' },
+]
+
+const appointmentSummary = [
+  { label: 'Today', value: '26', change: 'upcoming bookings', tone: 'blue' },
+  { label: 'Confirmed', value: '18', change: 'ready for check-in', tone: 'green' },
+  { label: 'Queue ready', value: '14', change: 'tickets generated', tone: 'amber' },
+  { label: 'Priority', value: '4', change: 'high urgency', tone: 'purple' },
 ]
 
 function App() {
@@ -254,10 +264,21 @@ function App() {
       appointmentType: 'In-person',
       status: 'Scheduled',
       reminderSchedule: '2h before',
+      queueGenerated: false,
     }
 
     setAppointments((previous) => [newAppointment, ...previous])
     setSelectedAppointmentId(newAppointment.id)
+  }
+
+  const toggleQueueGeneration = () => {
+    setAppointments((previous) =>
+      previous.map((appointment) =>
+        appointment.id === selectedAppointmentId
+          ? { ...appointment, queueGenerated: !appointment.queueGenerated }
+          : appointment,
+      ),
+    )
   }
 
   return (
@@ -632,6 +653,16 @@ function App() {
             <div className="flow-node">Unified Queue</div>
           </div>
 
+          <div className="appointment-stats">
+            {appointmentSummary.map((stat) => (
+              <article key={stat.label} className={`summary-card ${stat.tone}`}>
+                <span>{stat.label}</span>
+                <strong>{stat.value}</strong>
+                <small>{stat.change}</small>
+              </article>
+            ))}
+          </div>
+
           <div className="appointment-layout">
             <div className="panel appointment-list-panel">
               <div className="catalog-actions">
@@ -781,10 +812,14 @@ function App() {
               <div className="queue-box">
                 <div>
                   <span className="queue-title">Queue generation</span>
-                  <strong>Appointment → Check-in → Queue Ticket → Unified Queue</strong>
+                  <strong>
+                    {selectedAppointment.queueGenerated
+                      ? 'Queue ticket is ready for unified service flow.'
+                      : 'Appointment → Check-in → Queue Ticket → Unified Queue'}
+                  </strong>
                 </div>
-                <button type="button" className="primary-btn small-btn">
-                  Generate queue entry
+                <button type="button" className="primary-btn small-btn" onClick={toggleQueueGeneration}>
+                  {selectedAppointment.queueGenerated ? 'Remove queue' : 'Generate queue entry'}
                 </button>
               </div>
             </div>

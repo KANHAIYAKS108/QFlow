@@ -608,8 +608,40 @@ textarea:focus {
   align-items: center;
   flex-wrap: wrap;
   gap: 10px;
-  margin: 16px 0 22px;
+  margin: 16px 0 18px;
 }
+
+.appointment-stats {
+  display: grid;
+  grid-template-columns: repeat(4, minmax(0, 1fr));
+  gap: 14px;
+  margin-bottom: 20px;
+}
+
+.summary-card {
+  background: white;
+  border: 1px solid #e2e8f0;
+  border-radius: 16px;
+  padding: 14px 16px;
+  display: flex;
+  flex-direction: column;
+  gap: 6px;
+}
+
+.summary-card span,
+.summary-card small {
+  color: #475569;
+}
+
+.summary-card strong {
+  font-size: 1.4rem;
+  color: #0f172a;
+}
+
+.summary-card.blue strong { color: #2563eb; }
+.summary-card.green strong { color: #10b981; }
+.summary-card.amber strong { color: #d97706; }
+.summary-card.purple strong { color: #7c3aed; }
 
 .flow-node {
   border: 1px solid #dbeafe;
