@@ -1686,6 +1686,38 @@ function App() {
             </div>
           </div>
         </section>
+
+        <section className="customer-journey panel">
+          <div className="panel-header">
+            <div>
+              <p className="eyebrow">Master form 7</p>
+              <h3>Customer Live Journey</h3>
+            </div>
+            <span className="tag success">Real-time updates</span>
+          </div>
+
+          <div className="journey-card-wrapper">
+            <div className="journey-card">
+              <div className="journey-brand">QFLOW</div>
+              <div className="journey-ticket">A-104</div>
+              <div className="journey-label">YOUR POSITION</div>
+              <div className="journey-position">#7</div>
+              <div className="journey-ahead">6 PEOPLE AHEAD</div>
+              <div className="journey-label">EST. WAIT</div>
+              <div className="journey-wait">18–24 MIN</div>
+              <div className="journey-progress">
+                <span />
+              </div>
+              <div className="journey-current">Currently serving: A-098</div>
+              <div className="journey-return">Return by approximately</div>
+              <div className="journey-time">11:42 AM</div>
+              <div className="journey-actions">
+                <button type="button" className="secondary-btn small-btn">LEAVE QUEUE</button>
+                <button type="button" className="primary-btn small-btn">GET DIRECTIONS</button>
+              </div>
+            </div>
+          </div>
+        </section>
       </main>
     </div>
   )
