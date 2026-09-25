@@ -585,13 +585,15 @@ textarea:focus {
   .service-layout,
   .field-grid,
   .toggle-grid,
-  .policy-grid {
+  .policy-grid,
+  .service-focus {
     grid-template-columns: 1fr;
   }
 
   .hero-banner,
   .top-bar,
-  .panel-header {
+  .panel-header,
+  .catalog-actions {
     flex-direction: column;
     align-items: flex-start;
   }
