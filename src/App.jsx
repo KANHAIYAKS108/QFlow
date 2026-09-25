@@ -471,6 +471,24 @@ function App() {
     )
   }
 
+  const updateTicketLifecycle = (nextStatus) => {
+    setTickets((previous) =>
+      previous.map((ticket) =>
+        ticket.id === selectedTicketId
+          ? {
+              ...ticket,
+              status: nextStatus,
+              calledAt: nextStatus === 'Called' ? new Date().toLocaleString() : ticket.calledAt,
+              serviceStartedAt:
+                nextStatus === 'Serving' ? new Date().toLocaleString() : ticket.serviceStartedAt,
+              serviceCompletedAt:
+                nextStatus === 'Completed' ? new Date().toLocaleString() : ticket.serviceCompletedAt,
+            }
+          : ticket,
+      ),
+    )
+  }
+
   return (
     <div className="qflow-app">
       <aside className="sidebar">
@@ -1344,6 +1362,15 @@ function App() {
                 <div className="queue-actions">
                   <button type="button" className="secondary-btn small-btn" onClick={autoAssignTicket}>
                     Auto assign
+                  </button>
+                  <button type="button" className="secondary-btn small-btn" onClick={() => updateTicketLifecycle('Notified')}>
+                    Notify
+                  </button>
+                  <button type="button" className="secondary-btn small-btn" onClick={() => updateTicketLifecycle('Called')}>
+                    Call
+                  </button>
+                  <button type="button" className="primary-btn small-btn" onClick={() => updateTicketLifecycle('Serving')}>
+                    Serve
                   </button>
                   <button type="button" className="primary-btn small-btn" onClick={advanceTicketStatus}>
                     Advance status

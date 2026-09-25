@@ -805,6 +805,13 @@ textarea:focus {
   gap: 8px;
 }
 
+.queue-actions {
+  display: flex;
+  flex-wrap: wrap;
+  justify-content: flex-end;
+  gap: 8px;
+}
+
 .queue-title {
   letter-spacing: 0.08em;
   text-transform: uppercase;
