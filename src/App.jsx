@@ -1626,7 +1626,13 @@ function App() {
               <div className="next-ticket">
                 <span className="queue-code">{nextCustomer.ticketId}</span>
                 <strong>{nextCustomer.service}</strong>
-                <small>{nextCustomer.customerId}</small>
+                <small>
+                  {nextCustomer.customerId} • {nextCustomer.location}
+                </small>
+                <div className="next-meta">
+                  <span>{nextCustomer.priority}</span>
+                  <span>{nextCustomer.estimatedWait}</span>
+                </div>
               </div>
 
               <div className="action-grid">
