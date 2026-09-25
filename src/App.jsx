@@ -70,6 +70,15 @@ const overviewStats = [
 function App() {
   const [services, setServices] = useState(initialServices)
   const [selectedServiceId, setSelectedServiceId] = useState(initialServices[0].id)
+  const [serviceFilter, setServiceFilter] = useState('All')
+
+  const filteredServices = useMemo(
+    () =>
+      serviceFilter === 'All'
+        ? services
+        : services.filter((service) => service.category === serviceFilter),
+    [serviceFilter, services],
+  )
 
   const selectedService = useMemo(
     () => services.find((service) => service.id === selectedServiceId) ?? services[0],
@@ -222,8 +231,20 @@ function App() {
               </button>
             </div>
 
+            <div className="catalog-actions">
+              <select value={serviceFilter} onChange={(event) => setServiceFilter(event.target.value)}>
+                <option value="All">All categories</option>
+                <option value="Banking">Banking</option>
+                <option value="Finance">Finance</option>
+                <option value="Transactions">Transactions</option>
+                <option value="Support">Support</option>
+                <option value="General">General</option>
+              </select>
+              <span className="catalog-count">{filteredServices.length} services</span>
+            </div>
+
             <div className="service-list">
-              {services.map((service) => (
+              {filteredServices.map((service) => (
                 <button
                   key={service.id}
                   type="button"
