@@ -412,6 +412,49 @@ function App() {
             </div>
           </div>
         </section>
+
+        <section className="policy-grid">
+          <div className="panel mini-panel">
+            <div className="panel-header">
+              <h3>Queue readiness</h3>
+              <span className="tag success">Operational</span>
+            </div>
+            <div className="readiness-box">
+              <strong>{selectedService.queueEnabled ? 'Ready to queue' : 'Paused for queue'}</strong>
+              <span>{selectedService.maxQueueSize} max customer slots</span>
+            </div>
+            <ul className="policy-list">
+              <li>Average task duration: {selectedService.estimatedDuration} minutes</li>
+              <li>Buffer time: {selectedService.bufferTime} minutes</li>
+              <li>Priority: {selectedService.priority}</li>
+            </ul>
+          </div>
+
+          <div className="panel mini-panel">
+            <div className="panel-header">
+              <h3>Service policies</h3>
+              <span className="tag warning">Business rules</span>
+            </div>
+            <div className="policy-stack">
+              <div className="policy-row">
+                <span>Queue enabled</span>
+                <strong>{selectedService.queueEnabled ? 'On' : 'Off'}</strong>
+              </div>
+              <div className="policy-row">
+                <span>Appointment enabled</span>
+                <strong>{selectedService.appointmentEnabled ? 'On' : 'Off'}</strong>
+              </div>
+              <div className="policy-row">
+                <span>Remote join</span>
+                <strong>{selectedService.remoteJoin ? 'Allowed' : 'Not allowed'}</strong>
+              </div>
+              <div className="policy-row">
+                <span>Required docs</span>
+                <strong>{selectedService.requiredDocuments}</strong>
+              </div>
+            </div>
+          </div>
+        </section>
       </main>
     </div>
   )
