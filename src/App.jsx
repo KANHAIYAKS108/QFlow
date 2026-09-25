@@ -263,6 +263,7 @@ function App() {
   const [appointmentFilter, setAppointmentFilter] = useState('All')
   const [ticketFilter, setTicketFilter] = useState('All')
   const [customerPosition, setCustomerPosition] = useState(7)
+  const [journeyStatus, setJourneyStatus] = useState('Queue active')
   const [queueEvents, setQueueEvents] = useState([
     { id: 1, action: 'System', detail: 'Control room initialized', time: '09:45 AM' },
   ])
@@ -1726,9 +1727,14 @@ function App() {
               </div>
               <div className="journey-return">Return by approximately</div>
               <div className="journey-time">{customerPosition === 1 ? 'Now' : '11:42 AM'}</div>
+              <div className="journey-status">{journeyStatus}</div>
               <div className="journey-actions">
-                <button type="button" className="secondary-btn small-btn">LEAVE QUEUE</button>
-                <button type="button" className="primary-btn small-btn">GET DIRECTIONS</button>
+                <button type="button" className="secondary-btn small-btn" onClick={() => setJourneyStatus('Queue left successfully')}>
+                  LEAVE QUEUE
+                </button>
+                <button type="button" className="primary-btn small-btn" onClick={() => setJourneyStatus('Directions opened in map view')}>
+                  GET DIRECTIONS
+                </button>
               </div>
             </div>
           </div>
