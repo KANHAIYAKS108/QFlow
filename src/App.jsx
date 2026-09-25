@@ -248,6 +248,7 @@ function App() {
                 <button
                   key={service.id}
                   type="button"
+                  aria-pressed={service.id === selectedService?.id}
                   className={`service-card ${service.id === selectedService?.id ? 'selected' : ''}`}
                   onClick={() => setSelectedServiceId(service.id)}
                 >
@@ -270,6 +271,21 @@ function App() {
             <div className="panel-header">
               <h3>Service details</h3>
               <span className="tag success">{selectedService.status}</span>
+            </div>
+
+            <div className="service-focus">
+              <div className="focus-pill">
+                <span>Branches</span>
+                <strong>{selectedService.branches.length}</strong>
+              </div>
+              <div className="focus-pill">
+                <span>Duration</span>
+                <strong>{selectedService.estimatedDuration} min</strong>
+              </div>
+              <div className="focus-pill">
+                <span>Priority</span>
+                <strong>{selectedService.priority}</strong>
+              </div>
             </div>
 
             <div className="field-grid">
@@ -423,6 +439,7 @@ function App() {
                   <button
                     key={branch}
                     type="button"
+                    aria-pressed={selectedService.branches.includes(branch)}
                     className={`chip ${selectedService.branches.includes(branch) ? 'active' : ''}`}
                     onClick={() => toggleBranch(branch)}
                   >
