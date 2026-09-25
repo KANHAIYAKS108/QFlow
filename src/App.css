@@ -1345,6 +1345,77 @@ textarea:focus {
   flex-wrap: wrap;
 }
 
+.notification-panel {
+  margin-top: 22px;
+}
+
+.notification-layout {
+  display: grid;
+  grid-template-columns: repeat(3, minmax(0, 1fr));
+  gap: 18px;
+  margin-top: 18px;
+}
+
+.notification-side {
+  padding: 18px;
+}
+
+.notification-side h3 {
+  margin: 0 0 12px;
+}
+
+.event-selector {
+  display: flex;
+  flex-wrap: wrap;
+  gap: 8px;
+}
+
+.event-option {
+  background: #f8fafc;
+  border: 1px solid #dbeafe;
+  border-radius: 999px;
+  padding: 8px 10px;
+  color: #0f172a;
+  font-size: 0.72rem;
+  font-weight: 600;
+}
+
+.event-option.selected {
+  background: #dbeafe;
+  border-color: rgba(59, 130, 246, 0.4);
+}
+
+.channel-list,
+.automation-list {
+  display: flex;
+  flex-direction: column;
+  gap: 10px;
+}
+
+.channel-item {
+  display: flex;
+  align-items: center;
+  gap: 10px;
+  background: #f8fafc;
+  border: 1px solid #e2e8f0;
+  border-radius: 12px;
+  padding: 10px 12px;
+}
+
+.channel-item input {
+  accent-color: #2563eb;
+}
+
+.automation-list span {
+  background: #eef6ff;
+  border: 1px solid #dbeafe;
+  border-radius: 10px;
+  padding: 8px 10px;
+  color: #1d4ed8;
+  font-size: 0.8rem;
+  font-weight: 600;
+}
+
 .ticket-panel .appointment-status.waiting {
   background: #fef3c7;
   color: #92400e;

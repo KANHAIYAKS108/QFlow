@@ -251,6 +251,20 @@ const liveQueueStats = [
   { label: 'Alerts', value: '3', tone: 'red' },
 ]
 
+const notificationEvents = [
+  'QUEUE_JOINED',
+  'POSITION_CHANGED',
+  'APPROACHING_TURN',
+  'CUSTOMER_CALLED',
+  'APPOINTMENT_REMINDER',
+  'APPOINTMENT_CANCELLED',
+  'NO_SHOW_WARNING',
+  'SERVICE_COMPLETED',
+  'QUEUE_DELAYED',
+]
+
+const notificationChannels = ['Browser', 'Push', 'Email', 'SMS', 'WhatsApp']
+
 function App() {
   const [staff, setStaff] = useState(initialStaff)
   const [counters, setCounters] = useState(initialCounters)
@@ -264,6 +278,8 @@ function App() {
   const [ticketFilter, setTicketFilter] = useState('All')
   const [customerPosition, setCustomerPosition] = useState(7)
   const [journeyStatus, setJourneyStatus] = useState('Queue active')
+  const [selectedNotificationEvent, setSelectedNotificationEvent] = useState('POSITION_CHANGED')
+  const [selectedChannels, setSelectedChannels] = useState(['Browser', 'Push', 'SMS'])
   const [queueEvents, setQueueEvents] = useState([
     { id: 1, action: 'System', detail: 'Control room initialized', time: '09:45 AM' },
   ])
@@ -1745,6 +1761,55 @@ function App() {
                 <button type="button" className="primary-btn small-btn" onClick={() => setJourneyStatus('Directions opened in map view')}>
                   GET DIRECTIONS
                 </button>
+              </div>
+            </div>
+          </div>
+        </section>
+
+        <section className="notification-panel panel">
+          <div className="panel-header">
+            <div>
+              <p className="eyebrow">Master form 8</p>
+              <h3>Notification &amp; Automation Master</h3>
+            </div>
+            <span className="tag success">Smart rules enabled</span>
+          </div>
+
+          <div className="notification-layout">
+            <div className="panel notification-side">
+              <h3>Notification event</h3>
+              <div className="event-selector">
+                {notificationEvents.map((event) => (
+                  <button
+                    key={event}
+                    type="button"
+                    className={`event-option ${selectedNotificationEvent === event ? 'selected' : ''}`}
+                    onClick={() => setSelectedNotificationEvent(event)}
+                  >
+                    {event}
+                  </button>
+                ))}
+              </div>
+            </div>
+
+            <div className="panel notification-side">
+              <h3>Channels</h3>
+              <div className="channel-list">
+                {notificationChannels.map((channel) => (
+                  <label key={channel} className="channel-item">
+                    <input type="checkbox" checked={selectedChannels.includes(channel)} readOnly />
+                    <span>{channel}</span>
+                  </label>
+                ))}
+              </div>
+            </div>
+
+            <div className="panel notification-side">
+              <h3>Automation</h3>
+              <div className="automation-list">
+                <span>Instant send</span>
+                <span>Retry logic</span>
+                <span>Escalate delay</span>
               </div>
             </div>
           </div>
