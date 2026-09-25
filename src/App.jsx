@@ -1,4 +1,4 @@
-import { useMemo, useState } from 'react'
+import { useEffect, useMemo, useState } from 'react'
 import './App.css'
 
 const branchOptions = ['Noida Sector 18', 'Greater Noida', 'Delhi Central']
@@ -262,6 +262,7 @@ function App() {
   const [staffFilter, setStaffFilter] = useState('All')
   const [appointmentFilter, setAppointmentFilter] = useState('All')
   const [ticketFilter, setTicketFilter] = useState('All')
+  const [customerPosition, setCustomerPosition] = useState(7)
   const [queueEvents, setQueueEvents] = useState([
     { id: 1, action: 'System', detail: 'Control room initialized', time: '09:45 AM' },
   ])
@@ -423,6 +424,14 @@ function App() {
       ) ?? selectedTicket,
     [liveQueueList, selectedTicket],
   )
+
+  useEffect(() => {
+    const interval = setInterval(() => {
+      setCustomerPosition((current) => (current > 1 ? current - 1 : 1))
+    }, 5000)
+
+    return () => clearInterval(interval)
+  }, [])
 
   const queueHealthCards = useMemo(
     () => [
@@ -1699,18 +1708,24 @@ function App() {
           <div className="journey-card-wrapper">
             <div className="journey-card">
               <div className="journey-brand">QFLOW</div>
-              <div className="journey-ticket">A-104</div>
+              <div className="journey-ticket">{selectedTicket.ticketNumber}</div>
               <div className="journey-label">YOUR POSITION</div>
-              <div className="journey-position">#7</div>
-              <div className="journey-ahead">6 PEOPLE AHEAD</div>
-              <div className="journey-label">EST. WAIT</div>
-              <div className="journey-wait">18–24 MIN</div>
-              <div className="journey-progress">
-                <span />
+              <div className="journey-position">#{customerPosition}</div>
+              <div className="journey-ahead">
+                {customerPosition > 1 ? `${customerPosition - 1} PEOPLE AHEAD` : 'YOU ARE NEXT'}
               </div>
-              <div className="journey-current">Currently serving: A-098</div>
+              <div className="journey-label">EST. WAIT</div>
+              <div className="journey-wait">
+                {customerPosition > 5 ? '18–24 MIN' : customerPosition > 3 ? '12–18 MIN' : '5–10 MIN'}
+              </div>
+              <div className="journey-progress">
+                <span style={{ width: `${Math.max(28, 100 - (customerPosition - 1) * 12)}%` }} />
+              </div>
+              <div className="journey-current">
+                Currently serving: {customerPosition > 1 ? 'A-098' : selectedTicket.ticketNumber}
+              </div>
               <div className="journey-return">Return by approximately</div>
-              <div className="journey-time">11:42 AM</div>
+              <div className="journey-time">{customerPosition === 1 ? 'Now' : '11:42 AM'}</div>
               <div className="journey-actions">
                 <button type="button" className="secondary-btn small-btn">LEAVE QUEUE</button>
                 <button type="button" className="primary-btn small-btn">GET DIRECTIONS</button>
